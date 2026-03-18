@@ -1617,7 +1617,7 @@ async function loadScMesh() {
     }
   }
 
- function loadColumbia() {
+function loadColumbia() {
   return loadFeedColumn('columbia-feed', 'columbia-count', [
     {
       name: 'WIS',
@@ -1627,6 +1627,11 @@ async function loadScMesh() {
     {
       name: 'WLTX',
       url: 'https://news.google.com/rss/search?q=site:wltx.com+(Columbia+OR+Lexington+OR+Richland)+when:7d&hl=en-US&gl=US&ceid=US:en',
+      geoClass: 'geo-columbia'
+    },
+    {
+      name: 'The State',
+      url: 'https://news.google.com/rss/search?q=site:thestate.com+(Columbia+SC+OR+Richland+County+OR+Lexington+County)+when:7d&hl=en-US&gl=US&ceid=US:en',
       geoClass: 'geo-columbia'
     }
   ], { filter: true });
