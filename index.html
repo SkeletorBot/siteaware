@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +32,7 @@ html
   --cyan: #06b6d4;
   --purple: #a855f7;
   --columbia: #22c55e;
-  --lexington: #3b82f6;
+  --scmesh: #3b82f6;
   --midlands: #a855f7;
   --font: 'JetBrains Mono', 'Consolas', 'SF Mono', monospace;
   --radius: 4px;
@@ -65,7 +64,7 @@ body::after {
   );
 }
 
-/* ── HEADER ── */
+/* HEADER */
 .site-header {
   display: flex;
   align-items: center;
@@ -110,7 +109,7 @@ body::after {
 
 .header-meta .clock { color: var(--text-secondary); }
 
-/* ── INCIDENT BAR ── */
+/* INCIDENT BAR */
 .incident-bar {
   border-bottom: 1px solid var(--border);
   padding: 12px 16px;
@@ -240,7 +239,7 @@ body::after {
   gap: 8px;
 }
 
-/* ── MAIN GRID ── */
+/* MAIN GRID */
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 300px;
@@ -287,7 +286,7 @@ body::after {
 }
 
 .col-columbia .geo-dot { background: var(--columbia); box-shadow: 0 0 4px var(--columbia); }
-.col-lexington .geo-dot { background: var(--lexington); box-shadow: 0 0 4px var(--lexington); }
+.col-scmesh .geo-dot { background: var(--scmesh); box-shadow: 0 0 4px var(--scmesh); }
 .col-midlands .geo-dot { background: var(--midlands); box-shadow: 0 0 4px var(--midlands); }
 
 .col-header .col-count {
@@ -305,7 +304,7 @@ body::after {
   gap: 6px;
 }
 
-/* ── NEWS CARDS ── */
+/* NEWS CARDS */
 .news-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -342,22 +341,19 @@ body::after {
 
 .geo-columbia .src-dot { background: var(--columbia); }
 .geo-columbia { color: var(--columbia); }
-.geo-lexington .src-dot { background: var(--lexington); }
-.geo-lexington { color: var(--lexington); }
+.geo-scmesh .src-dot { background: var(--scmesh); }
+.geo-scmesh { color: var(--scmesh); }
 .geo-midlands .src-dot { background: var(--midlands); }
 .geo-midlands { color: var(--midlands); }
-.geo-alert .src-dot { background: var(--red); }
-.geo-alert { color: var(--red); }
 
 .news-card .nc-headline {
   font-size: 0.8rem;
   font-weight: 400;
   color: var(--text-primary);
   line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .news-card .nc-time {
@@ -366,7 +362,7 @@ body::after {
   margin-top: 6px;
 }
 
-/* ── WEATHER PANEL ── */
+/* WEATHER PANEL */
 .weather-panel .col-header h2 { color: var(--cyan); }
 
 .wx-section {
@@ -453,7 +449,6 @@ body::after {
   letter-spacing: 0.06em;
 }
 
-/* Forecast */
 .forecast-day-group {
   margin-bottom: 6px;
 }
@@ -498,7 +493,6 @@ body::after {
 .forecast-temp { color: var(--text-primary); text-align: right; white-space: nowrap; }
 .forecast-temp-night { color: var(--text-dim); }
 
-/* Alert cards */
 .wx-alert-card {
   background: rgba(239,68,68,0.06);
   border: 1px solid var(--red-dim);
@@ -525,7 +519,6 @@ body::after {
   overflow: hidden;
 }
 
-/* Quake rows */
 .quake-row {
   display: flex;
   align-items: center;
@@ -553,7 +546,6 @@ body::after {
 .quake-place { color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .quake-time { color: var(--text-dim); font-size: 0.6rem; white-space: nowrap; }
 
-/* ── UPCOMING BAR ── */
 .upcoming-bar {
   padding: 12px 16px;
   border-top: 1px solid var(--border);
@@ -612,7 +604,6 @@ body::after {
   margin-top: 3px;
 }
 
-/* ── LOADING / EMPTY ── */
 .loading-text, .empty-text {
   font-size: 0.7rem;
   color: var(--text-dim);
@@ -646,13 +637,11 @@ body::after {
   100% { background-position: -200% 0; }
 }
 
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
 
-/* ── TOOLBAR ── */
 .toolbar-row {
   display: flex;
   align-items: center;
@@ -683,7 +672,6 @@ body::after {
 .toolbar-btn:hover { border-color: var(--border-bright); color: var(--text-primary); }
 .toolbar-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(6,182,212,0.08); }
 
-/* ── FLOATING PANELS ── */
 .float-panel {
   position: fixed;
   top: 60px;
@@ -893,7 +881,6 @@ body::after {
   border-top: 1px solid var(--border);
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
   .main-grid {
     grid-template-columns: 1fr 1fr;
@@ -1083,7 +1070,7 @@ body::after {
   <div class="panel-body" style="min-height:auto;">
     <div class="cam-grid" id="cam-grid"></div>
   </div>
-  <div class="panel-note">Camera 147 loaded as a custom HLS stream. If the stream goes stale later, swap the URL in the CAMERAS array.</div>
+  <div class="panel-note">Camera 147 loaded as a custom HLS stream.</div>
 </div>
 
 <div class="float-panel" id="panel-fire" style="display:none; width:580px;">
@@ -1114,12 +1101,12 @@ body::after {
     </div>
   </div>
 
-  <div class="column col-lexington">
+  <div class="column col-scmesh">
     <div class="col-header">
-      <h2><span class="geo-dot"></span> Lexington</h2>
-      <span class="col-count" id="lexington-count"></span>
+      <h2><span class="geo-dot"></span> SC Mesh</h2>
+      <span class="col-count" id="scmesh-count"></span>
     </div>
-    <div class="col-body" id="lexington-feed">
+    <div class="col-body" id="scmesh-feed">
       <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
     </div>
   </div>
@@ -1137,7 +1124,7 @@ body::after {
   <div class="column weather-panel">
     <div class="col-header">
       <h2>&#9729; Weather</h2>
-      <span class="col-count">Columbia</span>
+      <span class="col-count">Lexington, SC 29072</span>
     </div>
     <div class="col-body" style="gap:0; padding:0;">
       <div class="wx-section" id="wx-current">
@@ -1145,7 +1132,7 @@ body::after {
         <div class="loading-text">Loading</div>
       </div>
       <div class="wx-section" id="wx-aqi">
-        <div class="wx-section-title">Air Quality -- Columbia</div>
+        <div class="wx-section-title">Air Quality -- Lexington</div>
         <div class="loading-text">Loading</div>
       </div>
       <div class="wx-section" id="wx-alerts">
@@ -1174,18 +1161,16 @@ body::after {
 (function() {
   'use strict';
 
-  const COLUMBIA_LAT = 34.0007;
-  const COLUMBIA_LON = -81.0348;
+  const WEATHER_LAT = 33.9985;
+  const WEATHER_LON = -81.27098;
   const CAE_LAT = 33.9388;
   const CAE_LON = -81.1195;
 
   const INCIDENT_MAX_AGE_MS = 60 * 60 * 1000;
   const NEWS_MAX_ITEMS = 12;
+  const SCMESH_MAX_ITEMS = 20;
 
-  // Lexington + Richland / Columbia zones
   const NWS_ZONES = ['SCZ027', 'SCZ028'];
-
-  // Weather stations near Columbia
   const WX_STATIONS = ['KCAE', 'KCUB'];
 
   const PROXIES = [
@@ -1345,6 +1330,22 @@ body::after {
     return card;
   }
 
+  function renderMeshCard(packet) {
+    const card = document.createElement('div');
+    card.className = 'news-card';
+    const channel = packet.channel || 'Unknown';
+    const name = packet.long_name || 'Unknown Node';
+    const payload = packet.payload || '';
+    const when = packet.import_time || new Date().toISOString();
+
+    card.innerHTML =
+      '<div class="nc-source geo-scmesh"><span class="src-dot"></span> ' + escHtml(channel) + ' · ' + escHtml(name) + '</div>' +
+      '<div class="nc-headline">' + escHtml(payload) + '</div>' +
+      '<div class="nc-time">' + relTime(when) + '</div>';
+
+    return card;
+  }
+
   function updateClock() {
     const now = new Date();
     document.getElementById('clock').textContent =
@@ -1407,7 +1408,7 @@ body::after {
     try {
       const url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=' +
         new Date(Date.now() - INCIDENT_MAX_AGE_MS).toISOString() +
-        '&minmagnitude=3.5&latitude=' + COLUMBIA_LAT + '&longitude=' + COLUMBIA_LON + '&maxradiuskm=300';
+        '&minmagnitude=3.5&latitude=' + WEATHER_LAT + '&longitude=' + WEATHER_LON + '&maxradiuskm=300';
       const data = await fetchJson(url);
       (data.features || []).forEach(f => {
         const p = f.properties;
@@ -1501,22 +1502,39 @@ body::after {
     if (countEl) countEl.textContent = shown.length + ' items';
   }
 
+  async function loadScMesh() {
+    const container = document.getElementById('scmesh-feed');
+    const countEl = document.getElementById('scmesh-count');
+    container.innerHTML = '';
+
+    try {
+      const data = await fetchJson('https://meshview.scmesh.us/api/chat');
+      const packets = (data.packets || [])
+        .filter(p => p && p.payload)
+        .sort((a, b) => new Date(b.import_time) - new Date(a.import_time))
+        .slice(0, SCMESH_MAX_ITEMS);
+
+      if (!packets.length) {
+        container.innerHTML = '<div class="empty-text">No chat packets loaded</div>';
+        if (countEl) countEl.textContent = '0 items';
+        return;
+      }
+
+      packets.forEach(packet => container.appendChild(renderMeshCard(packet)));
+      if (countEl) countEl.textContent = packets.length + ' items';
+    } catch (e) {
+      container.innerHTML = '<div class="empty-text">Failed to load SC Mesh chat</div>';
+      if (countEl) countEl.textContent = '';
+      console.warn('SC Mesh chat:', e);
+    }
+  }
+
   function loadColumbia() {
     return loadFeedColumn('columbia-feed', 'columbia-count', [
       {
         name: 'WIS / Google News',
         url: 'https://news.google.com/rss/search?q=site:wistv.com+(Columbia+OR+Richland+OR+West+Columbia)+when:7d&hl=en-US&gl=US&ceid=US:en',
         geoClass: 'geo-columbia'
-      }
-    ], { filter: true });
-  }
-
-  function loadLexington() {
-    return loadFeedColumn('lexington-feed', 'lexington-count', [
-      {
-        name: 'Lexington Ledger / Google News',
-        url: 'https://news.google.com/rss/search?q=site:swlexledger.com+(Lexington+OR+Lake+Murray+OR+Cayce+OR+Irmo)+when:14d&hl=en-US&gl=US&ceid=US:en',
-        geoClass: 'geo-lexington'
       }
     ], { filter: true });
   }
@@ -1607,7 +1625,7 @@ body::after {
     const section = document.getElementById('wx-forecast');
     try {
       if (!forecastUrl) {
-        const meta = await fetchJson('https://api.weather.gov/points/' + COLUMBIA_LAT + ',' + COLUMBIA_LON);
+        const meta = await fetchJson('https://api.weather.gov/points/' + WEATHER_LAT + ',' + WEATHER_LON);
         forecastUrl = meta.properties.forecast;
       }
       const data = await fetchJson(forecastUrl);
@@ -1686,8 +1704,8 @@ body::after {
   async function loadAqi() {
     const section = document.getElementById('wx-aqi');
     try {
-      const url = 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + COLUMBIA_LAT +
-        '&longitude=' + COLUMBIA_LON + '&current=us_aqi,pm2_5,pm10,ozone&timezone=America/New_York';
+      const url = 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + WEATHER_LAT +
+        '&longitude=' + WEATHER_LON + '&current=us_aqi,pm2_5,pm10,ozone&timezone=America/New_York';
       const data = await fetchJson(url);
       const c = data.current;
       const aqi = c.us_aqi;
@@ -1702,7 +1720,7 @@ body::after {
       else { cat = 'Hazardous'; aqiClass = 'aqi-hazardous'; }
 
       section.innerHTML =
-        '<div class="wx-section-title">Air Quality -- Columbia</div>' +
+        '<div class="wx-section-title">Air Quality -- Lexington</div>' +
         '<div class="aqi-display">' +
           '<div class="aqi-number ' + aqiClass + '">' + aqi + '</div>' +
           '<div>' +
@@ -1711,7 +1729,7 @@ body::after {
           '</div>' +
         '</div>';
     } catch (e) {
-      section.innerHTML = '<div class="wx-section-title">Air Quality -- Columbia</div><div class="empty-text">Failed to load AQI</div>';
+      section.innerHTML = '<div class="wx-section-title">Air Quality -- Lexington</div><div class="empty-text">Failed to load AQI</div>';
       console.warn('AQI:', e);
     }
   }
@@ -1764,7 +1782,7 @@ body::after {
     try {
       const startTime = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
       const url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=' + startTime +
-        '&minmagnitude=1.5&latitude=' + COLUMBIA_LAT + '&longitude=' + COLUMBIA_LON + '&maxradiuskm=500&orderby=time&limit=15';
+        '&minmagnitude=1.5&latitude=' + WEATHER_LAT + '&longitude=' + WEATHER_LON + '&maxradiuskm=500&orderby=time&limit=15';
       const data = await fetchJson(url);
       const features = data.features || [];
       let html = '<div class="wx-section-title">Recent Earthquakes -- 7d / M1.5+</div>';
@@ -1796,7 +1814,7 @@ body::after {
     const items = [
       { date: 'NWS CAE', title: 'Columbia office forecast and alerts', source: 'weather.gov/cae', link: 'https://www.weather.gov/cae/' },
       { date: 'SCEMD', title: 'Emergency Alerts and CodeRED', source: 'scemd.org', link: 'https://www.scemd.org/stay-informed/emergency-alerts/' },
-      { date: 'WIS LIVE', title: 'Open WIS livestream', source: 'wistv.com', link: 'https://www.wistv.com/livestream/' },
+      { date: 'SC MESH', title: 'Meshview chat and network activity', source: 'meshview.scmesh.us', link: 'https://meshview.scmesh.us/chat' },
       { date: '511SC', title: 'Traffic cameras and road conditions', source: '511sc.org', link: 'https://www.511sc.org/' }
     ];
 
@@ -1826,7 +1844,7 @@ body::after {
     await Promise.allSettled([
       refreshIncidents(),
       loadColumbia(),
-      loadLexington(),
+      loadScMesh(),
       loadMidlands(),
       loadCurrentWx(),
       loadForecast(),
@@ -1847,8 +1865,7 @@ body::after {
     await refreshAll();
   }
 
-  setInterval(refreshAll, 15 * 60 * 1000);
-
+  setInterval(refreshAll, 60 * 1000);
   init();
 
   let camTimer = null;
@@ -1976,9 +1993,7 @@ body::after {
     });
 
     if (camTimer) clearInterval(camTimer);
-    camTimer = setInterval(function() {
-      // stream is live; timer kept for parity
-    }, 30000);
+    camTimer = setInterval(function() {}, 30000);
   }
 
   (function() {
