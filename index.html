@@ -1560,32 +1560,32 @@ body::after {
     if (countEl) countEl.textContent = shown.length + ' items';
   }
 
-  async function loadScMesh() {
-    const container = document.getElementById('scmesh-feed');
-    const countEl = document.getElementById('scmesh-count');
-    container.innerHTML = '';
+async function loadScMesh() {
+  const container = document.getElementById('scmesh-feed');
+  const countEl = document.getElementById('scmesh-count');
+  container.innerHTML = '';
 
-    try {
-      const data = await fetchJson('https://meshview.scmesh.us/chat');
-      const packets = (data.packets || [])
-        .filter(p => p && p.payload)
-        .sort((a, b) => new Date(b.import_time) - new Date(a.import_time))
-        .slice(0, SCMESH_MAX_ITEMS);
+  try {
+    const data = await fetchJson('https://meshview.scmesh.us/api/chat');
+    const packets = (data.packets || [])
+      .filter(p => p && p.payload)
+      .sort((a, b) => new Date(b.import_time) - new Date(a.import_time))
+      .slice(0, SCMESH_MAX_ITEMS);
 
-      if (!packets.length) {
-        container.innerHTML = '<div class="empty-text">No chat packets loaded</div>';
-        if (countEl) countEl.textContent = '0 items';
-        return;
-      }
-
-      packets.forEach(packet => container.appendChild(renderMeshCard(packet)));
-      if (countEl) countEl.textContent = packets.length + ' items';
-    } catch (e) {
-      container.innerHTML = '<div class="empty-text">Failed to load SC Mesh chat</div>';
-      if (countEl) countEl.textContent = '';
-      console.warn('SC Mesh chat:', e);
+    if (!packets.length) {
+      container.innerHTML = '<div class="empty-text">No chat packets loaded</div>';
+      if (countEl) countEl.textContent = '0 items';
+      return;
     }
+
+    packets.forEach(packet => container.appendChild(renderMeshCard(packet)));
+    if (countEl) countEl.textContent = packets.length + ' items';
+  } catch (e) {
+    container.innerHTML = '<div class="empty-text">Failed to load SC Mesh chat</div>';
+    if (countEl) countEl.textContent = '';
+    console.warn('SC Mesh chat:', e);
   }
+}
 
   async function loadBlueskyColumn() {
     const container = document.getElementById('bsky-feed');
