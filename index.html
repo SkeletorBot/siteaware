@@ -2,568 +2,2126 @@ html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SITAWARE — Columbia / Lexington, SC</title>
-  <style>
-    :root {
-      --bg: #0b0b0b;
-      --panel: #111111;
-      --panel-2: #161616;
-      --border: #252525;
-      --text: #f5f5f5;
-      --muted: #b7b7b7;
-      --accent: #c9302c;
-      --accent-2: #9d1f1d;
-      --good: #2aa34a;
-      --warn: #d6a52f;
-      --bad: #d63c36;
-      --link: #d94a44;
-      --shadow: 0 10px 24px rgba(0,0,0,0.35);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<title>SITAWARE — Midlands, SC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    * { box-sizing: border-box; }
+:root {
+  --bg-root: #050607;
+  --bg-panel: #0b0d0f;
+  --bg-card: #10131a;
+  --bg-card-hover: #161a24;
+  --border: #1a1f2e;
+  --border-bright: #252d40;
+  --text-primary: #c8cdd8;
+  --text-secondary: #6b7280;
+  --text-dim: #3d4452;
+  --green: #22c55e;
+  --green-dim: #15803d;
+  --amber: #f59e0b;
+  --amber-dim: #92400e;
+  --red: #ef4444;
+  --red-dim: #991b1b;
+  --blue: #3b82f6;
+  --cyan: #06b6d4;
+  --purple: #a855f7;
+  --columbia: #22c55e;
+  --lexington: #3b82f6;
+  --midlands: #a855f7;
+  --font: 'JetBrains Mono', 'Consolas', 'SF Mono', monospace;
+  --radius: 4px;
+}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.4;
-    }
+html { font-size: 13px; }
 
-    a {
-      color: var(--link);
-      text-decoration: none;
-    }
+body {
+  font-family: var(--font);
+  background: var(--bg-root);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
 
-    a:hover { text-decoration: underline; }
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+}
 
-    .wrap {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-    }
+/* ── HEADER ── */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
 
-    .site-title {
-      margin: 0 0 14px;
-      font-size: 2.2rem;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-    }
+.site-header h1 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
+.site-header h1 .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
 
-    .location-banner {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--accent);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
 
-    .location-banner button {
-      background: rgba(255,255,255,0.12);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.header-meta {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
 
-    .coords {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-left: auto;
-    }
+.header-meta .clock { color: var(--text-secondary); }
 
-    .coords input {
-      background: #191919;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 10px;
-      min-width: 110px;
-    }
+/* ── INCIDENT BAR ── */
+.incident-bar {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  min-height: 52px;
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
 
-    .coords button {
-      background: #222;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-weight: 700;
-    }
+.incident-bar.clear {
+  background: linear-gradient(90deg, rgba(34,197,94,0.04), transparent 60%);
+  border-left: 3px solid var(--green-dim);
+}
 
-    .incident-bar {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-left: 5px solid var(--accent);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 14px;
-    }
+.incident-bar.active-amber {
+  background: linear-gradient(90deg, rgba(245,158,11,0.06), transparent 60%);
+  border-left: 3px solid var(--amber);
+}
 
-    .incident-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
+.incident-bar.active-red {
+  background: linear-gradient(90deg, rgba(239,68,68,0.08), transparent 60%);
+  border-left: 3px solid var(--red);
+  animation: bar-pulse-red 3s ease-in-out infinite;
+}
 
-    .nav-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin: 16px 0 18px;
-    }
+@keyframes bar-pulse-red {
+  0%, 100% { background: linear-gradient(90deg, rgba(239,68,68,0.06), transparent 60%); }
+  50% { background: linear-gradient(90deg, rgba(239,68,68,0.12), transparent 60%); }
+}
 
-    .nav-row a { color: var(--text); }
+.incident-bar-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
 
-    .layout {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 18px;
-    }
+.incident-bar-header .label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
-    .stack {
-      display: grid;
-      gap: 18px;
-    }
+.incident-bar.clear .label { color: var(--green-dim); }
+.incident-bar.active-amber .label { color: var(--amber); }
+.incident-bar.active-red .label { color: var(--red); }
 
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
+.incident-bar .status-icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
 
-    .panel-header {
-      background: linear-gradient(180deg, #1c1c1c, #121212);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 14px;
-      font-weight: 800;
-    }
+.incident-bar.clear .status-icon {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+.incident-bar.active-amber .status-icon {
+  background: var(--amber);
+  box-shadow: 0 0 8px var(--amber);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+.incident-bar.active-red .status-icon {
+  background: var(--red);
+  box-shadow: 0 0 10px var(--red);
+  animation: pulse-dot 1s ease-in-out infinite;
+}
 
-    .panel-body {
-      padding: 14px;
-    }
+.incident-bar .clear-text {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
 
-    .embed-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+.incident-cards {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
 
-    .embed-placeholder {
-      min-height: 190px;
-      border: 1px dashed #3a3a3a;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: var(--muted);
-      padding: 14px;
-      background: var(--panel-2);
-    }
+.incident-card {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  min-width: 260px;
+  max-width: 360px;
+  position: relative;
+  overflow: hidden;
+}
 
-    .section-links {
-      display: grid;
-      gap: 10px;
-    }
+.incident-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
 
-    .section-links a {
-      display: block;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: var(--text);
-    }
+.incident-card.severity-red::before { background: var(--red); }
+.incident-card.severity-amber::before { background: var(--amber); }
+.incident-card.severity-green::before { background: var(--green); }
 
-    .weather-block {
-      display: grid;
-      gap: 16px;
-    }
+.incident-card .ic-type {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
 
-    .current-weather {
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
-    }
+.incident-card.severity-red .ic-type { color: var(--red); }
+.incident-card.severity-amber .ic-type { color: var(--amber); }
 
-    .city-name {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-    }
+.incident-card .ic-title {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  font-weight: 400;
+  line-height: 1.4;
+}
 
-    .big-temp {
-      font-size: 2rem;
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
+.incident-card .ic-meta {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+  display: flex;
+  gap: 8px;
+}
 
-    .weather-meta {
-      color: var(--muted);
-      display: grid;
-      gap: 6px;
-    }
+/* ── MAIN GRID ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 300px;
+  min-height: calc(100vh - 260px);
+  border-bottom: 1px solid var(--border);
+}
 
-    .mini-card {
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
+.column {
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-    .mini-card:last-child { margin-bottom: 0; }
+.column:last-child { border-right: none; }
 
-    .status-tag {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 800;
-      margin-top: 8px;
-    }
+.col-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-panel);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
-    .good { background: rgba(42,163,74,0.18); color: #98efad; }
-    .warn { background: rgba(214,165,47,0.18); color: #f3d37d; }
-    .bad { background: rgba(214,60,54,0.18); color: #ff9c97; }
+.col-header h2 {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-    .forecast-list,
-    .quake-list,
-    .alert-list,
-    .news-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 10px;
-    }
+.col-header h2 .geo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
 
-    .forecast-list li,
-    .quake-list li,
-    .alert-list li,
-    .news-list li {
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-    }
+.col-columbia .geo-dot { background: var(--columbia); box-shadow: 0 0 4px var(--columbia); }
+.col-lexington .geo-dot { background: var(--lexington); box-shadow: 0 0 4px var(--lexington); }
+.col-midlands .geo-dot { background: var(--midlands); box-shadow: 0 0 4px var(--midlands); }
 
-    .muted { color: var(--muted); }
-    .small { font-size: 0.9rem; }
+.col-header .col-count {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  font-weight: 400;
+}
 
-    .upcoming {
-      margin-top: 18px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
+.col-body {
+  padding: 8px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-    @media (max-width: 920px) {
-      .layout,
-      .embed-grid {
-        grid-template-columns: 1fr;
-      }
+/* ── NEWS CARDS ── */
+.news-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
 
-      .coords {
-        margin-left: 0;
-      }
-    }
-  </style>
+.news-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-bright);
+}
+
+.news-card .nc-source {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.news-card .nc-source .src-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.geo-columbia .src-dot { background: var(--columbia); }
+.geo-columbia { color: var(--columbia); }
+.geo-lexington .src-dot { background: var(--lexington); }
+.geo-lexington { color: var(--lexington); }
+.geo-midlands .src-dot { background: var(--midlands); }
+.geo-midlands { color: var(--midlands); }
+.geo-alert .src-dot { background: var(--red); }
+.geo-alert { color: var(--red); }
+
+.news-card .nc-headline {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.news-card .nc-time {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* ── WEATHER PANEL ── */
+.weather-panel .col-header h2 { color: var(--cyan); }
+
+.wx-section {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.wx-section:last-child { border-bottom: none; }
+
+.wx-section-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.wx-current-temp {
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.wx-current-temp .unit {
+  font-size: 1rem;
+  color: var(--text-dim);
+  vertical-align: super;
+}
+
+.wx-current-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.wx-current-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin-top: 8px;
+  font-size: 0.7rem;
+}
+
+.wx-detail-label { color: var(--text-dim); }
+.wx-detail-value { color: var(--text-secondary); text-align: right; }
+
+.wx-obs-note {
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.aqi-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aqi-number {
+  font-size: 1.8rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.aqi-good { color: var(--green); }
+.aqi-moderate { color: #eab308; }
+.aqi-usg { color: var(--amber); }
+.aqi-unhealthy { color: var(--red); }
+.aqi-very-unhealthy { color: #a855f7; }
+.aqi-hazardous { color: #7f1d1d; }
+
+.aqi-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.aqi-cat {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Forecast */
+.forecast-day-group {
+  margin-bottom: 6px;
+}
+
+.forecast-day-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 0 2px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  margin-bottom: 2px;
+}
+
+.forecast-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 0.7rem;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+.forecast-row:last-child { border-bottom: none; }
+
+.forecast-period {
+  color: var(--text-dim);
+  min-width: 55px;
+  font-size: 0.6rem;
+}
+.forecast-desc {
+  color: var(--text-secondary);
+  flex: 1;
+  text-align: left;
+  font-size: 0.65rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 8px;
+}
+.forecast-temp { color: var(--text-primary); text-align: right; white-space: nowrap; }
+.forecast-temp-night { color: var(--text-dim); }
+
+/* Alert cards */
+.wx-alert-card {
+  background: rgba(239,68,68,0.06);
+  border: 1px solid var(--red-dim);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  margin-bottom: 6px;
+}
+
+.wx-alert-card:last-child { margin-bottom: 0; }
+
+.wx-alert-card .alert-event {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--red);
+}
+
+.wx-alert-card .alert-desc {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Quake rows */
+.quake-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.7rem;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.quake-row:last-child { border-bottom: none; }
+
+.quake-mag {
+  font-weight: 700;
+  min-width: 32px;
+  text-align: center;
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-size: 0.7rem;
+}
+
+.quake-mag.low { color: var(--green); background: rgba(34,197,94,0.1); }
+.quake-mag.med { color: var(--amber); background: rgba(245,158,11,0.1); }
+.quake-mag.high { color: var(--red); background: rgba(239,68,68,0.1); }
+
+.quake-place { color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.quake-time { color: var(--text-dim); font-size: 0.6rem; white-space: nowrap; }
+
+/* ── UPCOMING BAR ── */
+.upcoming-bar {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.upcoming-bar .section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.upcoming-items {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.upcoming-item {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  min-width: 220px;
+  max-width: 340px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s ease;
+}
+
+.upcoming-item:hover { border-color: var(--border-bright); }
+
+.upcoming-date {
+  font-size: 0.6rem;
+  color: var(--cyan);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.upcoming-title {
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.upcoming-source {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+/* ── LOADING / EMPTY ── */
+.loading-text, .empty-text {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  padding: 16px 0;
+  text-align: center;
+}
+
+.loading-text::after {
+  content: '';
+  animation: ellipsis 1.5s steps(3) infinite;
+}
+
+@keyframes ellipsis {
+  0% { content: ''; }
+  33% { content: '.'; }
+  66% { content: '..'; }
+  100% { content: '...'; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius);
+  height: 60px;
+  margin-bottom: 6px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+
+/* ── TOOLBAR ── */
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.toolbar-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.toolbar-btn:hover { border-color: var(--border-bright); color: var(--text-primary); }
+.toolbar-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(6,182,212,0.08); }
+
+/* ── FLOATING PANELS ── */
+.float-panel {
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  width: 560px;
+  max-height: calc(100vh - 80px);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: none;
+}
+
+.panel-resize-handle {
+  position: absolute;
+  z-index: 10;
+}
+.panel-resize-handle.rs-e { top: 0; right: -3px; width: 6px; height: 100%; cursor: e-resize; }
+.panel-resize-handle.rs-w { top: 0; left: -3px; width: 6px; height: 100%; cursor: w-resize; }
+.panel-resize-handle.rs-s { bottom: -3px; left: 0; width: 100%; height: 6px; cursor: s-resize; }
+.panel-resize-handle.rs-se { bottom: -3px; right: -3px; width: 14px; height: 14px; cursor: se-resize; }
+.panel-resize-handle.rs-sw { bottom: -3px; left: -3px; width: 14px; height: 14px; cursor: sw-resize; }
+
+.panel-drag-handle { display: none; }
+
+.panel-resize-handle.rs-se::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--border-bright);
+  border-bottom: 2px solid var(--border-bright);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-root);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.panel-header.dragging { cursor: grabbing; }
+
+.panel-header h3 {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  pointer-events: none;
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 4px;
+  font-family: var(--font);
+  pointer-events: auto;
+}
+
+.panel-close:hover { color: var(--text-primary); }
+
+.panel-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1999;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.panel-backdrop.active { display: block; }
+
+.panel-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 300px;
+}
+
+.panel-body iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  border: none;
+  background: #000;
+}
+
+.cam-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 8px;
+}
+
+.cam-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+
+.cam-card video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+  background: #000;
+}
+
+.cam-card .cam-label {
+  padding: 4px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cam-title {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cam-sub {
+  font-size: 0.5rem;
+  color: var(--text-dim);
+}
+
+.live-stations {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+
+.station-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  cursor: pointer;
+}
+.station-link:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-bright);
+  transform: translateY(-1px);
+}
+.station-link:active { transform: translateY(0); }
+
+.station-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.station-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+.station-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.station-desc {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.station-arrow {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.station-link:hover .station-arrow { color: var(--text-secondary); }
+.station-link:hover .station-name { color: #fff; }
+
+.panel-note {
+  padding: 10px 12px;
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .main-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .weather-panel { grid-column: span 2; }
+  .float-panel { width: calc(100vw - 32px); right: 16px; }
+}
+
+@media (max-width: 700px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .weather-panel { grid-column: span 1; }
+
+  .float-panel {
+    position: fixed;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0;
+    width: 100% !important;
+    max-height: 100vh;
+    height: 60vh;
+    border-radius: 16px 16px 0 0;
+    z-index: 2000;
+    transition: height 0.25s ease-out;
+    will-change: height;
+  }
+
+  .float-panel.sheet-full { height: 100vh; border-radius: 0; }
+  .float-panel.sheet-mini { height: 30vh; }
+  .float-panel.sheet-dragging { transition: none; }
+
+  .panel-resize-handle { display: none !important; }
+
+  .panel-drag-handle {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 2px 0;
+    background: var(--bg-root);
+    border-radius: 16px 16px 0 0;
+    touch-action: none;
+  }
+  .panel-drag-handle .handle-bar {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--text-dim);
+  }
+
+  .panel-header {
+    padding: 8px 16px;
+    cursor: default;
+  }
+
+  .panel-close {
+    font-size: 1.4rem;
+    padding: 4px 10px;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .panel-body {
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .panel-body iframe {
+    min-height: 280px;
+  }
+
+  .cam-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .toolbar-row {
+    gap: 4px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-btn {
+    font-size: 0.6rem;
+    padding: 8px 12px;
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .site-header {
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 12px;
+  }
+
+  .header-meta {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #refresh-btn {
+    padding: 6px 14px !important;
+  }
+}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h1 class="site-title">SITAWARE</h1>
 
-    <div class="toolbar">
-      <div class="location-banner">
-        <span id="bannerLocation">COLUMBIA / LEXINGTON, SC</span>
-        <button id="refreshTopBtn">↻ REFRESH</button>
-      </div>
+<header class="site-header">
+  <h1><span class="dot"></span> SITAWARE</h1>
+  <div class="header-meta">
+    <span>MIDLANDS, SC</span>
+    <span class="clock" id="clock"></span>
+    <span id="last-refresh" style="font-size:0.65rem;"></span>
+    <button id="refresh-btn" title="Refresh all data" style="background:none;border:1px solid var(--border);color:var(--text-secondary);font-family:var(--font);font-size:0.65rem;padding:3px 10px;border-radius:var(--radius);cursor:pointer;letter-spacing:0.06em;transition:border-color 0.15s,color 0.15s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)';" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)';">&#8635; REFRESH</button>
+  </div>
+</header>
 
-      <div class="coords">
-        <input id="cityInput" type="text" value="Columbia / Lexington, SC" aria-label="City name" />
-        <input id="latInput" type="number" step="0.0001" value="34.0007" aria-label="Latitude" />
-        <input id="lonInput" type="number" step="0.0001" value="-81.0348" aria-label="Longitude" />
-        <button id="applyBtn">Apply</button>
-      </div>
+<section class="incident-bar clear" id="incident-bar">
+  <div class="incident-bar-header">
+    <span class="status-icon"></span>
+    <span class="label">Last Hour -- Active Incidents</span>
+  </div>
+  <div class="clear-text" id="incident-clear">All clear -- no active incidents in the last 60 minutes</div>
+  <div class="incident-cards" id="incident-cards" style="display:none;"></div>
+</section>
+
+<div class="toolbar-row">
+  <button class="toolbar-btn" id="btn-live" onclick="togglePanel('live')">&#9654; LIVE NEWS</button>
+  <button class="toolbar-btn" id="btn-aircraft" onclick="togglePanel('aircraft')">&#9992; AIRCRAFT</button>
+  <button class="toolbar-btn" id="btn-cameras" onclick="togglePanel('cameras')">&#128249; CAMERAS</button>
+  <button class="toolbar-btn" id="btn-incidents" onclick="togglePanel('fire')">&#128293; FIRE/EMS</button>
+</div>
+
+<div class="panel-backdrop" id="panel-backdrop"></div>
+
+<div class="float-panel" id="panel-live" style="display:none; width:400px;">
+  <div class="panel-drag-handle"><span class="handle-bar"></span></div>
+  <div class="panel-header">
+    <h3>&#9654; Live News Streams</h3>
+    <button class="panel-close" onclick="togglePanel('live')">&times;</button>
+  </div>
+  <div class="panel-resize-handle rs-e"></div>
+  <div class="panel-resize-handle rs-w"></div>
+  <div class="panel-resize-handle rs-s"></div>
+  <div class="panel-resize-handle rs-se"></div>
+  <div class="panel-resize-handle rs-sw"></div>
+  <div class="panel-body" id="live-body" style="min-height:auto;">
+    <div class="live-stations" id="live-stations"></div>
+  </div>
+</div>
+
+<div class="float-panel" id="panel-aircraft" style="display:none; width:640px;">
+  <div class="panel-drag-handle"><span class="handle-bar"></span></div>
+  <div class="panel-header">
+    <h3>&#9992; Aircraft Tracker</h3>
+    <button class="panel-close" onclick="togglePanel('aircraft')">&times;</button>
+  </div>
+  <div class="panel-resize-handle rs-e"></div>
+  <div class="panel-resize-handle rs-w"></div>
+  <div class="panel-resize-handle rs-s"></div>
+  <div class="panel-resize-handle rs-se"></div>
+  <div class="panel-resize-handle rs-sw"></div>
+  <div class="panel-body" style="min-height:420px;">
+    <iframe id="adsb-iframe" src="" style="min-height:420px;" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div class="float-panel" id="panel-cameras" style="display:none; width:580px;">
+  <div class="panel-drag-handle"><span class="handle-bar"></span></div>
+  <div class="panel-header">
+    <h3>&#128249; Traffic Cameras — I-20 E @ MM 62</h3>
+    <button class="panel-close" onclick="togglePanel('cameras')">&times;</button>
+  </div>
+  <div class="panel-resize-handle rs-e"></div>
+  <div class="panel-resize-handle rs-w"></div>
+  <div class="panel-resize-handle rs-s"></div>
+  <div class="panel-resize-handle rs-se"></div>
+  <div class="panel-resize-handle rs-sw"></div>
+  <div class="panel-body" style="min-height:auto;">
+    <div class="cam-grid" id="cam-grid"></div>
+  </div>
+  <div class="panel-note">Camera 147 loaded as a custom HLS stream. If the stream goes stale later, swap the URL in the CAMERAS array.</div>
+</div>
+
+<div class="float-panel" id="panel-fire" style="display:none; width:580px;">
+  <div class="panel-drag-handle"><span class="handle-bar"></span></div>
+  <div class="panel-header">
+    <h3>&#128293; PulsePoint -- Fire/EMS</h3>
+    <button class="panel-close" onclick="togglePanel('fire')">&times;</button>
+  </div>
+  <div class="panel-resize-handle rs-e"></div>
+  <div class="panel-resize-handle rs-w"></div>
+  <div class="panel-resize-handle rs-s"></div>
+  <div class="panel-resize-handle rs-se"></div>
+  <div class="panel-resize-handle rs-sw"></div>
+  <div class="panel-body" style="min-height:420px;">
+    <iframe id="pulsepoint-iframe" src="" style="min-height:420px;" allowfullscreen></iframe>
+  </div>
+</div>
+
+<main class="main-grid">
+
+  <div class="column col-columbia">
+    <div class="col-header">
+      <h2><span class="geo-dot"></span> Columbia</h2>
+      <span class="col-count" id="columbia-count"></span>
     </div>
-
-    <section class="incident-bar">
-      <div class="incident-title">Last Hour — Active Incidents</div>
-      <div id="incidentStatus">All clear — no active incidents in the last 60 minutes</div>
-      <div class="muted small" style="margin-top:8px;">Starter version: swap this section later with your preferred CAD, PulsePoint, scanner, or county dispatch source.</div>
-    </section>
-
-    <nav class="nav-row">
-      <a href="#live-news">▶ Live News</a>
-      <a href="#aircraft">✈ Aircraft</a>
-      <a href="#cameras">📹 Cameras</a>
-      <a href="#fireems">🔥 Fire/EMS</a>
-    </nav>
-
-    <div class="layout">
-      <div class="stack">
-        <section class="panel">
-          <div class="panel-header">Columbia / Lexington Area Feeds</div>
-          <div class="panel-body">
-            <div class="embed-grid">
-              <div class="panel" id="live-news">
-                <div class="panel-header">▶ Live News Streams</div>
-                <div class="panel-body">
-                  <div class="section-links news-links">
-                    <a href="https://www.wistv.com/" target="_blank" rel="noopener noreferrer">WIS News — Columbia</a>
-                    <a href="https://www.wltx.com/" target="_blank" rel="noopener noreferrer">WLTX News19 — Columbia</a>
-                    <a href="https://www.postandcourier.com/columbia/" target="_blank" rel="noopener noreferrer">Post and Courier Columbia</a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel" id="aircraft">
-                <div class="panel-header">✈ Aircraft Tracker</div>
-                <div class="panel-body">
-                  <div class="embed-placeholder">Open ADS-B Exchange for live aircraft activity over Columbia and Lexington County.</div>
-                  <div style="margin-top:10px;">
-                    <a href="https://globe.adsbexchange.com/" target="_blank" rel="noopener noreferrer">Open ADS-B Exchange</a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel" id="cameras">
-                <div class="panel-header">📹 Traffic Cameras — Midlands</div>
-                <div class="panel-body">
-                  <div class="embed-placeholder">Use 511SC for live South Carolina traffic cameras and road conditions.</div>
-                  <div style="margin-top:10px;">
-                    <a href="https://www.511sc.org/" target="_blank" rel="noopener noreferrer">Open 511SC Cameras</a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel" id="fireems">
-                <div class="panel-header">🔥 Fire/EMS</div>
-                <div class="panel-body">
-                  <div class="section-links">
-                    <a href="https://www.lex-co.sc.gov/departments/emergency-management" target="_blank" rel="noopener noreferrer">Lexington County Emergency Management</a>
-                    <a href="https://www.columbiasc.gov/" target="_blank" rel="noopener noreferrer">City of Columbia</a>
-                    <a href="https://www.richlandcountysc.gov/Government/Departments/Emergency-Services" target="_blank" rel="noopener noreferrer">Richland County Emergency Services</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">Regional Quick Links</div>
-          <div class="panel-body">
-            <div class="section-links">
-              <a href="https://www.weather.gov/cae/" target="_blank" rel="noopener noreferrer">National Weather Service Columbia</a>
-              <a href="https://www.scemd.org/" target="_blank" rel="noopener noreferrer">South Carolina Emergency Management Division</a>
-              <a href="https://www.airnow.gov/" target="_blank" rel="noopener noreferrer">AirNow</a>
-              <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank" rel="noopener noreferrer">USGS Earthquakes</a>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="stack">
-        <section class="panel">
-          <div class="panel-header">☁ Weather</div>
-          <div class="panel-body weather-block">
-            <div class="current-weather">
-              <div class="city-name" id="weatherCity">Columbia / Lexington, SC</div>
-              <div class="big-temp" id="weatherTemp">Loading...</div>
-              <div class="weather-meta" id="weatherMeta"></div>
-            </div>
-
-            <div class="mini-card">
-              <strong>Air Quality — Columbia / Lexington</strong>
-              <div id="aqWrap" style="margin-top:10px;">Loading...</div>
-            </div>
-
-            <div class="mini-card">
-              <strong>Active Alerts</strong>
-              <ul class="alert-list" id="alertsList" style="margin-top:10px;">
-                <li>No active alerts loaded yet</li>
-              </ul>
-            </div>
-
-            <div class="mini-card">
-              <strong>Forecast</strong>
-              <ul class="forecast-list" id="forecastList" style="margin-top:10px;">
-                <li>Loading...</li>
-              </ul>
-            </div>
-
-            <div class="mini-card">
-              <strong>Recent Earthquakes — 7d / M1.5+</strong>
-              <ul class="quake-list" id="quakeList" style="margin-top:10px;">
-                <li>Loading...</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-      </div>
+    <div class="col-body" id="columbia-feed">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
     </div>
-
-    <div class="upcoming">▶ Upcoming</div>
   </div>
 
-  <script>
-    const state = {
-      city: 'Columbia / Lexington, SC',
-      lat: 34.0007,
-      lon: -81.0348
-    };
+  <div class="column col-lexington">
+    <div class="col-header">
+      <h2><span class="geo-dot"></span> Lexington</h2>
+      <span class="col-count" id="lexington-count"></span>
+    </div>
+    <div class="col-body" id="lexington-feed">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+  </div>
 
-    const weatherCodeMap = {
-      0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
-      45: 'Fog', 48: 'Rime fog', 51: 'Light drizzle', 53: 'Moderate drizzle',
-      55: 'Dense drizzle', 61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain',
-      71: 'Slight snow', 73: 'Moderate snow', 75: 'Heavy snow',
-      80: 'Rain showers', 81: 'Moderate showers', 82: 'Violent showers',
-      95: 'Thunderstorm', 96: 'Thunderstorm with hail', 99: 'Strong thunderstorm with hail'
-    };
+  <div class="column col-midlands">
+    <div class="col-header">
+      <h2><span class="geo-dot"></span> Midlands</h2>
+      <span class="col-count" id="midlands-count"></span>
+    </div>
+    <div class="col-body" id="midlands-feed">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+  </div>
 
-    function saveLocation() {
-      localStorage.setItem('sitaware-city', state.city);
-      localStorage.setItem('sitaware-lat', String(state.lat));
-      localStorage.setItem('sitaware-lon', String(state.lon));
+  <div class="column weather-panel">
+    <div class="col-header">
+      <h2>&#9729; Weather</h2>
+      <span class="col-count">Columbia</span>
+    </div>
+    <div class="col-body" style="gap:0; padding:0;">
+      <div class="wx-section" id="wx-current">
+        <div class="wx-section-title">Current Conditions</div>
+        <div class="loading-text">Loading</div>
+      </div>
+      <div class="wx-section" id="wx-aqi">
+        <div class="wx-section-title">Air Quality -- Columbia</div>
+        <div class="loading-text">Loading</div>
+      </div>
+      <div class="wx-section" id="wx-alerts">
+        <div class="wx-section-title">Active Alerts</div>
+        <div class="empty-text" style="color:var(--green-dim); text-align:left; padding:0;">No active alerts</div>
+      </div>
+      <div class="wx-section" id="wx-forecast">
+        <div class="wx-section-title">Forecast</div>
+        <div class="loading-text">Loading</div>
+      </div>
+      <div class="wx-section" id="wx-quakes">
+        <div class="wx-section-title">Recent Earthquakes -- 7d / M1.5+</div>
+        <div class="loading-text">Loading</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<section class="upcoming-bar">
+  <div class="section-label">&#9654; Upcoming</div>
+  <div class="upcoming-items" id="upcoming-items"></div>
+</section>
+
+<script>
+(function() {
+  'use strict';
+
+  const COLUMBIA_LAT = 34.0007;
+  const COLUMBIA_LON = -81.0348;
+  const CAE_LAT = 33.9388;
+  const CAE_LON = -81.1195;
+
+  const INCIDENT_MAX_AGE_MS = 60 * 60 * 1000;
+  const NEWS_MAX_ITEMS = 12;
+
+  // Lexington + Richland / Columbia zones
+  const NWS_ZONES = ['SCZ027', 'SCZ028'];
+
+  // Weather stations near Columbia
+  const WX_STATIONS = ['KCAE', 'KCUB'];
+
+  const PROXIES = [
+    { name: 'cfworker', url: 'https://rss-proxy.large-lake4645.workers.dev/?url=', type: 'raw' },
+    { name: 'rss2json', url: 'https://api.rss2json.com/v1/api.json?rss_url=', type: 'json' },
+    { name: 'corsproxy', url: 'https://corsproxy.io/?url=', type: 'raw' },
+    { name: 'allorigins', url: 'https://api.allorigins.win/get?url=', type: 'allorigins' }
+  ];
+
+  const FILTER_KEYWORDS = [
+    'gamecock', 'clemson', 'ncaa', 'nba', 'nfl', 'mlb',
+    'touchdown', 'home run', 'playoff', 'draft pick',
+    'celebrity', 'movie review', 'album review',
+    'fantasy football', 'betting odds', 'horoscope', 'crossword', 'sudoku'
+  ];
+
+  const LIVE_STATIONS = [
+    {
+      name: 'WIS News 10',
+      desc: 'WIS livestream',
+      color: '#22c55e',
+      url: 'https://www.wistv.com/livestream/'
     }
+  ];
 
-    function loadSavedLocation() {
-      const savedCity = localStorage.getItem('sitaware-city');
-      const savedLat = parseFloat(localStorage.getItem('sitaware-lat'));
-      const savedLon = parseFloat(localStorage.getItem('sitaware-lon'));
-      if (savedCity && !Number.isNaN(savedLat) && !Number.isNaN(savedLon)) {
-        state.city = savedCity;
-        state.lat = savedLat;
-        state.lon = savedLon;
+  const CAMERAS = [
+    {
+      label: 'I-20 E @ MM 62',
+      sub: 'Camera 147',
+      hls: 'http://8.15.251.57:1935/rtplive/10147/playlist.m3u8'
+    }
+  ];
+
+  let incidents = [];
+  let forecastUrl = null;
+  let panelState = {};
+
+  try {
+    panelState = JSON.parse(sessionStorage.getItem('panelState') || '{}');
+  } catch (e) {}
+
+  function savePanelState(name, props) {
+    panelState[name] = Object.assign(panelState[name] || {}, props);
+    try { sessionStorage.setItem('panelState', JSON.stringify(panelState)); } catch (e) {}
+  }
+
+  function relTime(date) {
+    const now = Date.now();
+    const d = date instanceof Date ? date : new Date(date);
+    const diff = now - d.getTime();
+    if (diff < 0) return 'just now';
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return mins + ' min ago';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return hrs + 'h ago';
+    const days = Math.floor(hrs / 24);
+    return days + 'd ago';
+  }
+
+  function escHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
+  function isFiltered(title) {
+    const lower = (title || '').toLowerCase();
+    return FILTER_KEYWORDS.some(kw => lower.includes(kw));
+  }
+
+  async function fetchJson(url) {
+    const r = await fetch(url, {
+      headers: {
+        'Accept': 'application/geo+json,application/json',
+        'User-Agent': 'sitaware-midlands/1.0'
       }
-      document.getElementById('cityInput').value = state.city;
-      document.getElementById('latInput').value = state.lat;
-      document.getElementById('lonInput').value = state.lon;
-      renderLocation();
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }
+
+  function parseRssXml(xmlStr) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xmlStr, 'text/xml');
+    const items = [];
+
+    doc.querySelectorAll('item').forEach(item => {
+      const title = item.querySelector('title')?.textContent?.trim() || '';
+      const link = item.querySelector('link')?.textContent?.trim() || '';
+      const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
+      items.push({ title, link, pubDate: pubDate ? new Date(pubDate) : new Date() });
+    });
+
+    if (!items.length) {
+      doc.querySelectorAll('entry').forEach(entry => {
+        const title = entry.querySelector('title')?.textContent?.trim() || '';
+        const link = entry.querySelector('link')?.getAttribute('href') || '';
+        const updated = entry.querySelector('updated')?.textContent?.trim() ||
+                        entry.querySelector('published')?.textContent?.trim() || '';
+        items.push({ title, link, pubDate: updated ? new Date(updated) : new Date() });
+      });
     }
 
-    function renderLocation() {
-      document.getElementById('bannerLocation').textContent = state.city.toUpperCase();
-      document.getElementById('weatherCity').textContent = state.city;
-      document.title = `SITAWARE — ${state.city}`;
+    return items;
+  }
+
+  async function fetchRss(url) {
+    let lastError;
+    for (let i = 0; i < PROXIES.length; i++) {
+      const proxy = PROXIES[i];
+      try {
+        const proxyUrl = proxy.url + encodeURIComponent(url);
+        const r = await fetch(proxyUrl);
+        if (!r.ok) throw new Error(proxy.name + ' HTTP ' + r.status);
+
+        if (proxy.type === 'json') {
+          const data = await r.json();
+          if (data.status !== 'ok') throw new Error(data.message || 'rss2json error');
+          return (data.items || []).map(item => ({
+            title: item.title || '',
+            link: item.link || '',
+            pubDate: item.pubDate ? new Date(item.pubDate) : new Date()
+          }));
+        }
+
+        let xmlStr;
+        if (proxy.type === 'allorigins') {
+          const wrapper = await r.json();
+          xmlStr = wrapper.contents;
+        } else {
+          xmlStr = await r.text();
+        }
+
+        if (!xmlStr || xmlStr.length < 50) throw new Error(proxy.name + ' empty response');
+        const items = parseRssXml(xmlStr);
+        if (!items.length) throw new Error(proxy.name + ' parsed 0 items');
+        return items;
+      } catch (e) {
+        lastError = e;
+        console.warn('[fetchRss] ' + proxy.name + ' failed:', e.message);
+      }
+    }
+    throw lastError || new Error('All proxies failed for ' + url);
+  }
+
+  function renderNewsCard(item, source, geoClass) {
+    const card = document.createElement('a');
+    card.className = 'news-card';
+    card.href = item.link || '#';
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.innerHTML =
+      '<div class="nc-source ' + geoClass + '"><span class="src-dot"></span> ' + escHtml(source) + '</div>' +
+      '<div class="nc-headline">' + escHtml(item.title) + '</div>' +
+      '<div class="nc-time">' + relTime(item.pubDate) + '</div>';
+    return card;
+  }
+
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+        timeZone: 'America/New_York'
+      }) + ' ET';
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  function addIncident(obj) {
+    if (incidents.find(i => i.id === obj.id)) return;
+    incidents.push(obj);
+  }
+
+  function pruneIncidents() {
+    const cutoff = Date.now() - INCIDENT_MAX_AGE_MS;
+    incidents = incidents.filter(i => i.time.getTime() > cutoff);
+  }
+
+  function renderIncidents() {
+    pruneIncidents();
+    const bar = document.getElementById('incident-bar');
+    const clearEl = document.getElementById('incident-clear');
+    const cardsEl = document.getElementById('incident-cards');
+
+    if (!incidents.length) {
+      bar.className = 'incident-bar clear';
+      clearEl.style.display = '';
+      cardsEl.style.display = 'none';
+      return;
     }
 
-    function getAQITag(aqi) {
-      if (aqi <= 50) return '<span class="status-tag good">Good</span>';
-      if (aqi <= 100) return '<span class="status-tag warn">Moderate</span>';
-      return '<span class="status-tag bad">Poor</span>';
+    const hasRed = incidents.some(i => i.severity === 'red');
+    bar.className = 'incident-bar ' + (hasRed ? 'active-red' : 'active-amber');
+    clearEl.style.display = 'none';
+    cardsEl.style.display = 'flex';
+    cardsEl.innerHTML = '';
+
+    incidents.sort((a, b) => b.time - a.time).forEach(inc => {
+      const card = document.createElement('div');
+      card.className = 'incident-card severity-' + (inc.severity || 'amber');
+      card.innerHTML =
+        '<div class="ic-type">' + escHtml(inc.type) + '</div>' +
+        '<div class="ic-title">' + escHtml(inc.title) + '</div>' +
+        '<div class="ic-meta"><span>' + escHtml(inc.source) + '</span><span>' + relTime(inc.time) + '</span></div>';
+      cardsEl.appendChild(card);
+    });
+  }
+
+  async function fetchQuakesLastHour() {
+    try {
+      const url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=' +
+        new Date(Date.now() - INCIDENT_MAX_AGE_MS).toISOString() +
+        '&minmagnitude=3.5&latitude=' + COLUMBIA_LAT + '&longitude=' + COLUMBIA_LON + '&maxradiuskm=300';
+      const data = await fetchJson(url);
+      (data.features || []).forEach(f => {
+        const p = f.properties;
+        addIncident({
+          id: 'usgs-' + f.id,
+          type: 'EARTHQUAKE',
+          title: 'M' + p.mag.toFixed(1) + ' -- ' + p.place,
+          source: 'USGS',
+          time: new Date(p.time),
+          severity: p.mag >= 5 ? 'red' : 'amber'
+        });
+      });
+    } catch (e) {
+      console.warn('USGS last-hour:', e);
+    }
+  }
+
+  async function fetchNwsAlertsIncident() {
+    try {
+      const results = await Promise.allSettled(
+        NWS_ZONES.map(zone => fetchJson('https://api.weather.gov/alerts/active?zone=' + zone))
+      );
+
+      results.forEach(r => {
+        if (r.status !== 'fulfilled') return;
+        (r.value.features || []).forEach(f => {
+          const p = f.properties;
+          const event = (p.event || '').toLowerCase();
+          if (!event.includes('warning')) return;
+          const sev = ['Extreme', 'Severe'].includes(p.severity) ? 'red' : 'amber';
+          addIncident({
+            id: 'nws-' + f.id,
+            type: 'NWS ALERT',
+            title: p.event + (p.headline ? ': ' + p.headline.slice(0, 110) : ''),
+            source: 'NWS CAE',
+            time: new Date(p.onset || p.effective || p.sent),
+            severity: sev
+          });
+        });
+      });
+    } catch (e) {
+      console.warn('NWS alerts incident:', e);
+    }
+  }
+
+  async function refreshIncidents() {
+    incidents = [];
+    await Promise.allSettled([fetchQuakesLastHour(), fetchNwsAlertsIncident()]);
+    renderIncidents();
+    document.getElementById('last-refresh').textContent = 'Updated ' +
+      new Date().toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'America/New_York'
+      });
+  }
+
+  async function loadFeedColumn(containerId, countId, feeds, opts) {
+    opts = opts || {};
+    const container = document.getElementById(containerId);
+    const allItems = [];
+
+    const results = await Promise.allSettled(
+      feeds.map(f => fetchRss(f.url).then(items => items.map(it => ({
+        title: it.title,
+        link: it.link,
+        pubDate: it.pubDate,
+        source: f.name,
+        geoClass: f.geoClass
+      }))))
+    );
+
+    results.forEach(r => {
+      if (r.status === 'fulfilled') allItems.push.apply(allItems, r.value);
+    });
+
+    let filtered = opts.filter ? allItems.filter(it => !isFiltered(it.title)) : allItems;
+    filtered.sort((a, b) => b.pubDate - a.pubDate);
+    container.innerHTML = '';
+
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty-text">No items loaded</div>';
+      return;
     }
 
-    async function loadWeather() {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Weather failed');
-      const data = await res.json();
-      const current = data.current;
-      document.getElementById('weatherTemp').textContent = `${Math.round(current.temperature_2m)}°`;
-      document.getElementById('weatherMeta').innerHTML = `
-        <div>${weatherCodeMap[current.weather_code] || 'Unknown conditions'}</div>
-        <div>Feels like ${Math.round(current.apparent_temperature)}°</div>
-        <div>Humidity ${current.relative_humidity_2m}%</div>
-        <div>Wind ${Math.round(current.wind_speed_10m)} mph</div>
-      `;
+    const shown = filtered.slice(0, NEWS_MAX_ITEMS);
+    shown.forEach(item => container.appendChild(renderNewsCard(item, item.source, item.geoClass)));
 
-      const forecastHtml = data.daily.time.slice(0, 5).map((day, i) => {
-        const label = new Date(`${day}T12:00:00`).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-        return `<li><strong>${label}</strong><br><span class="muted">High ${Math.round(data.daily.temperature_2m_max[i])}° · Low ${Math.round(data.daily.temperature_2m_min[i])}° · Rain ${data.daily.precipitation_probability_max[i]}%</span></li>`;
-      }).join('');
-      document.getElementById('forecastList').innerHTML = forecastHtml;
-    }
+    const countEl = document.getElementById(countId);
+    if (countEl) countEl.textContent = shown.length + ' items';
+  }
 
-    async function loadAirQuality() {
-      const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${state.lat}&longitude=${state.lon}&current=us_aqi,pm2_5,pm10,ozone,carbon_monoxide&timezone=auto`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('AQ failed');
-      const data = await res.json();
-      const current = data.current;
-      const aqi = Math.round(current.us_aqi || 0);
-      document.getElementById('aqWrap').innerHTML = `
-        <div><strong>AQI ${aqi}</strong> ${getAQITag(aqi)}</div>
-        <div class="muted" style="margin-top:8px;">PM2.5 ${Math.round(current.pm2_5 || 0)} · PM10 ${Math.round(current.pm10 || 0)} · Ozone ${Math.round(current.ozone || 0)}</div>
-      `;
-    }
+  function loadColumbia() {
+    return loadFeedColumn('columbia-feed', 'columbia-count', [
+      {
+        name: 'WIS / Google News',
+        url: 'https://news.google.com/rss/search?q=site:wistv.com+(Columbia+OR+Richland+OR+West+Columbia)+when:7d&hl=en-US&gl=US&ceid=US:en',
+        geoClass: 'geo-columbia'
+      }
+    ], { filter: true });
+  }
 
-    async function loadEarthquakes() {
-      const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.5_week.geojson';
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Quakes failed');
-      const data = await res.json();
-      const items = data.features.slice(0, 6).map(item => {
-        const mag = item.properties.mag ?? 0;
-        const place = item.properties.place ?? 'Unknown';
-        return `<li><strong>M ${mag.toFixed(1)}</strong> — ${place}</li>`;
-      }).join('');
-      document.getElementById('quakeList').innerHTML = items;
-    }
+  function loadLexington() {
+    return loadFeedColumn('lexington-feed', 'lexington-count', [
+      {
+        name: 'Lexington Ledger / Google News',
+        url: 'https://news.google.com/rss/search?q=site:swlexledger.com+(Lexington+OR+Lake+Murray+OR+Cayce+OR+Irmo)+when:14d&hl=en-US&gl=US&ceid=US:en',
+        geoClass: 'geo-lexington'
+      }
+    ], { filter: true });
+  }
 
-    async function loadAlerts() {
-      document.getElementById('alertsList').innerHTML = `
-        <li><a href="https://www.weather.gov/cae/" target="_blank" rel="noopener noreferrer">Check NWS Columbia for active weather alerts</a></li>
-        <li><a href="https://www.scemd.org/" target="_blank" rel="noopener noreferrer">Check SCEMD for statewide alerts</a></li>
-      `;
-    }
+  function loadMidlands() {
+    return loadFeedColumn('midlands-feed', 'midlands-count', [
+      {
+        name: 'Post and Courier Columbia / Google News',
+        url: 'https://news.google.com/rss/search?q=(site:postandcourier.com+Columbia+SC)+when:7d&hl=en-US&gl=US&ceid=US:en',
+        geoClass: 'geo-midlands'
+      }
+    ], { filter: true });
+  }
 
-    async function refreshAll() {
-      document.getElementById('weatherTemp').textContent = 'Loading...';
-      document.getElementById('forecastList').innerHTML = '<li>Loading...</li>';
-      document.getElementById('aqWrap').textContent = 'Loading...';
-      document.getElementById('quakeList').innerHTML = '<li>Loading...</li>';
-      await Promise.allSettled([loadWeather(), loadAirQuality(), loadEarthquakes(), loadAlerts()]);
-    }
+  function degToCompass(deg) {
+    const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+    return dirs[Math.round(deg / 22.5) % 16];
+  }
 
-    function applyLocation() {
-      const city = document.getElementById('cityInput').value.trim();
-      const lat = parseFloat(document.getElementById('latInput').value);
-      const lon = parseFloat(document.getElementById('lonInput').value);
-      if (!city || Number.isNaN(lat) || Number.isNaN(lon)) {
-        alert('Please enter a valid city, latitude, and longitude.');
+  async function loadCurrentWx() {
+    const section = document.getElementById('wx-current');
+
+    try {
+      const results = await Promise.allSettled(
+        WX_STATIONS.map(station =>
+          fetchJson('https://api.weather.gov/stations/' + station + '/observations/latest')
+            .then(data => ({ station: station, props: data.properties }))
+        )
+      );
+
+      const valid = [];
+      results.forEach(r => {
+        if (r.status !== 'fulfilled') return;
+        const p = r.value.props;
+        const tempC = p.temperature ? p.temperature.value : null;
+        if (tempC == null) return;
+        const obsTime = p.timestamp ? new Date(p.timestamp).getTime() : 0;
+        valid.push({ station: r.value.station, props: p, obsTime: obsTime });
+      });
+
+      if (!valid.length) {
+        section.innerHTML = '<div class="wx-section-title">Current Conditions</div><div class="empty-text">Failed to load</div>';
         return;
       }
-      state.city = city;
-      state.lat = lat;
-      state.lon = lon;
-      saveLocation();
-      renderLocation();
-      refreshAll();
+
+      valid.sort((a, b) => b.obsTime - a.obsTime);
+      const best = valid[0];
+      const p = best.props;
+      const station = best.station;
+
+      const tempC = p.temperature.value;
+      const tempF = Math.round(tempC * 9 / 5 + 32);
+      const desc = p.textDescription || 'N/A';
+      const windSpd = (p.windSpeed && p.windSpeed.value != null) ? Math.round(p.windSpeed.value * 0.621371) : '--';
+      const windDir = (p.windDirection && p.windDirection.value != null) ? degToCompass(p.windDirection.value) : '';
+      const humidity = (p.relativeHumidity && p.relativeHumidity.value != null) ? Math.round(p.relativeHumidity.value) : '--';
+      const dewC = p.dewpoint ? p.dewpoint.value : null;
+      const dewF = dewC != null ? Math.round(dewC * 9 / 5 + 32) : '--';
+      const vis = (p.visibility && p.visibility.value != null) ? (p.visibility.value / 1609.34).toFixed(1) : '--';
+      const obsDate = new Date(best.obsTime);
+      const obsTimeStr = obsDate.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'America/New_York'
+      });
+      const ageMins = Math.round((Date.now() - best.obsTime) / 60000);
+      const staleNote = ageMins > 90 ? ' (stale -- ' + ageMins + 'min old)' : '';
+
+      section.innerHTML =
+        '<div class="wx-section-title">Current Conditions</div>' +
+        '<div class="wx-current-temp">' + tempF + '<span class="unit">&deg;F</span></div>' +
+        '<div class="wx-current-desc">' + escHtml(desc) + '</div>' +
+        '<div class="wx-current-details">' +
+          '<span class="wx-detail-label">Wind</span><span class="wx-detail-value">' + windDir + ' ' + windSpd + ' mph</span>' +
+          '<span class="wx-detail-label">Humidity</span><span class="wx-detail-value">' + humidity + '%</span>' +
+          '<span class="wx-detail-label">Dewpoint</span><span class="wx-detail-value">' + dewF + '&deg;F</span>' +
+          '<span class="wx-detail-label">Visibility</span><span class="wx-detail-value">' + vis + ' mi</span>' +
+        '</div>' +
+        '<div class="wx-obs-note">Obs: ' + station + ' at ' + obsTimeStr + staleNote + '</div>';
+    } catch (e) {
+      section.innerHTML = '<div class="wx-section-title">Current Conditions</div><div class="empty-text">Failed to load</div>';
+      console.warn('Weather:', e);
+    }
+  }
+
+  async function loadForecast() {
+    const section = document.getElementById('wx-forecast');
+    try {
+      if (!forecastUrl) {
+        const meta = await fetchJson('https://api.weather.gov/points/' + COLUMBIA_LAT + ',' + COLUMBIA_LON);
+        forecastUrl = meta.properties.forecast;
+      }
+      const data = await fetchJson(forecastUrl);
+      const periods = data.properties.periods || [];
+
+      if (!periods.length) {
+        section.innerHTML = '<div class="wx-section-title">Forecast</div><div class="empty-text">No forecast data</div>';
+        return;
+      }
+
+      let html = '<div class="wx-section-title">Forecast</div>';
+      let tonightPeriod = null;
+      const dayGroups = {};
+      const dayOrder = [];
+
+      periods.forEach(p => {
+        const name = p.name;
+        const isNight = p.isDaytime === false;
+
+        if (!tonightPeriod && (name === 'Tonight' || name === 'This Afternoon' || name === 'This Evening' || name === 'Overnight')) {
+          tonightPeriod = p;
+          return;
+        }
+
+        const dayName = name.endsWith(' Night') ? name.replace(' Night', '') : name;
+
+        if (!dayGroups[dayName]) {
+          dayGroups[dayName] = { day: null, night: null };
+          dayOrder.push(dayName);
+        }
+
+        if (isNight || name.endsWith(' Night')) dayGroups[dayName].night = p;
+        else dayGroups[dayName].day = p;
+      });
+
+      if (tonightPeriod) {
+        html +=
+          '<div class="forecast-row">' +
+            '<span class="forecast-period">' + escHtml(tonightPeriod.name) + '</span>' +
+            '<span class="forecast-desc">' + escHtml(tonightPeriod.shortForecast) + '</span>' +
+            '<span class="forecast-temp forecast-temp-night">' + tonightPeriod.temperature + '&deg;' + tonightPeriod.temperatureUnit + '</span>' +
+          '</div>';
+      }
+
+      dayOrder.slice(0, 3).forEach(dayName => {
+        const g = dayGroups[dayName];
+        html += '<div class="forecast-day-group"><div class="forecast-day-label">' + escHtml(dayName) + '</div>';
+
+        if (g.day) {
+          html +=
+            '<div class="forecast-row">' +
+              '<span class="forecast-period">Day</span>' +
+              '<span class="forecast-desc">' + escHtml(g.day.shortForecast) + '</span>' +
+              '<span class="forecast-temp">' + g.day.temperature + '&deg;' + g.day.temperatureUnit + '</span>' +
+            '</div>';
+        }
+        if (g.night) {
+          html +=
+            '<div class="forecast-row">' +
+              '<span class="forecast-period">Night</span>' +
+              '<span class="forecast-desc">' + escHtml(g.night.shortForecast) + '</span>' +
+              '<span class="forecast-temp forecast-temp-night">' + g.night.temperature + '&deg;' + g.night.temperatureUnit + '</span>' +
+            '</div>';
+        }
+
+        html += '</div>';
+      });
+
+      section.innerHTML = html;
+    } catch (e) {
+      section.innerHTML = '<div class="wx-section-title">Forecast</div><div class="empty-text">Failed to load</div>';
+      console.warn('Forecast:', e);
+    }
+  }
+
+  async function loadAqi() {
+    const section = document.getElementById('wx-aqi');
+    try {
+      const url = 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + COLUMBIA_LAT +
+        '&longitude=' + COLUMBIA_LON + '&current=us_aqi,pm2_5,pm10,ozone&timezone=America/New_York';
+      const data = await fetchJson(url);
+      const c = data.current;
+      const aqi = c.us_aqi;
+      const pm25 = c.pm2_5 != null ? c.pm2_5.toFixed(1) : '--';
+
+      let cat, aqiClass;
+      if (aqi <= 50) { cat = 'Good'; aqiClass = 'aqi-good'; }
+      else if (aqi <= 100) { cat = 'Moderate'; aqiClass = 'aqi-moderate'; }
+      else if (aqi <= 150) { cat = 'Unhealthy (Sensitive)'; aqiClass = 'aqi-usg'; }
+      else if (aqi <= 200) { cat = 'Unhealthy'; aqiClass = 'aqi-unhealthy'; }
+      else if (aqi <= 300) { cat = 'Very Unhealthy'; aqiClass = 'aqi-very-unhealthy'; }
+      else { cat = 'Hazardous'; aqiClass = 'aqi-hazardous'; }
+
+      section.innerHTML =
+        '<div class="wx-section-title">Air Quality -- Columbia</div>' +
+        '<div class="aqi-display">' +
+          '<div class="aqi-number ' + aqiClass + '">' + aqi + '</div>' +
+          '<div>' +
+            '<div class="aqi-cat ' + aqiClass + '">' + escHtml(cat) + '</div>' +
+            '<div class="aqi-label">PM2.5: ' + pm25 + ' &micro;g/m&sup3; &middot; Open-Meteo</div>' +
+          '</div>' +
+        '</div>';
+    } catch (e) {
+      section.innerHTML = '<div class="wx-section-title">Air Quality -- Columbia</div><div class="empty-text">Failed to load AQI</div>';
+      console.warn('AQI:', e);
+    }
+  }
+
+  async function loadAlerts() {
+    const section = document.getElementById('wx-alerts');
+    try {
+      const results = await Promise.allSettled(
+        NWS_ZONES.map(zone => fetchJson('https://api.weather.gov/alerts/active?zone=' + zone))
+      );
+
+      let features = [];
+      results.forEach(r => {
+        if (r.status === 'fulfilled') features = features.concat(r.value.features || []);
+      });
+
+      let html = '<div class="wx-section-title">Active Alerts</div>';
+
+      if (!features.length) {
+        html += '<div class="empty-text" style="color:var(--green-dim); text-align:left; padding:0;">No active NWS alerts</div>';
+      } else {
+        const seen = new Set();
+        features.forEach(f => {
+          const p = f.properties;
+          if (seen.has(f.id)) return;
+          seen.add(f.id);
+          html +=
+            '<div class="wx-alert-card">' +
+              '<div class="alert-event">' + escHtml(p.event) + '</div>' +
+              '<div class="alert-desc">' + escHtml(p.headline || (p.description || '').slice(0, 200)) + '</div>' +
+            '</div>';
+        });
+      }
+
+      html +=
+        '<div class="wx-alert-card" style="margin-top:8px;border-color:var(--border);background:rgba(59,130,246,0.06);">' +
+          '<div class="alert-event" style="color:var(--blue);">SCEMD Emergency Alerts</div>' +
+          '<div class="alert-desc"><a href="https://www.scemd.org/stay-informed/emergency-alerts/" target="_blank" rel="noopener">Emergency Alerts</a> &middot; <a href="https://www.scemd.org/stay-informed/emergency-alerts/codered-alerts/" target="_blank" rel="noopener">CodeRED</a></div>' +
+        '</div>';
+
+      section.innerHTML = html;
+    } catch (e) {
+      section.innerHTML = '<div class="wx-section-title">Active Alerts</div><div class="empty-text">Failed to load</div>';
+      console.warn('Alerts:', e);
+    }
+  }
+
+  async function loadRecentQuakes() {
+    const section = document.getElementById('wx-quakes');
+    try {
+      const startTime = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=' + startTime +
+        '&minmagnitude=1.5&latitude=' + COLUMBIA_LAT + '&longitude=' + COLUMBIA_LON + '&maxradiuskm=500&orderby=time&limit=15';
+      const data = await fetchJson(url);
+      const features = data.features || [];
+      let html = '<div class="wx-section-title">Recent Earthquakes -- 7d / M1.5+</div>';
+      if (!features.length) {
+        html += '<div class="empty-text" style="text-align:left; padding:0;">No recent quakes</div>';
+      } else {
+        features.forEach(f => {
+          const p = f.properties;
+          const mag = p.mag.toFixed(1);
+          let magClass = 'low';
+          if (p.mag >= 4.5) magClass = 'high';
+          else if (p.mag >= 3.0) magClass = 'med';
+          html +=
+            '<div class="quake-row">' +
+              '<span class="quake-mag ' + magClass + '">' + mag + '</span>' +
+              '<span class="quake-place">' + escHtml(p.place) + '</span>' +
+              '<span class="quake-time">' + relTime(p.time) + '</span>' +
+            '</div>';
+        });
+      }
+      section.innerHTML = html;
+    } catch (e) {
+      section.innerHTML = '<div class="wx-section-title">Recent Earthquakes -- 7d / M1.5+</div><div class="empty-text">Failed to load</div>';
+      console.warn('Quakes 7d:', e);
+    }
+  }
+
+  function loadUpcoming() {
+    const items = [
+      { date: 'NWS CAE', title: 'Columbia office forecast and alerts', source: 'weather.gov/cae', link: 'https://www.weather.gov/cae/' },
+      { date: 'SCEMD', title: 'Emergency Alerts and CodeRED', source: 'scemd.org', link: 'https://www.scemd.org/stay-informed/emergency-alerts/' },
+      { date: 'WIS LIVE', title: 'Open WIS livestream', source: 'wistv.com', link: 'https://www.wistv.com/livestream/' },
+      { date: '511SC', title: 'Traffic cameras and road conditions', source: '511sc.org', link: 'https://www.511sc.org/' }
+    ];
+
+    const container = document.getElementById('upcoming-items');
+    container.innerHTML = '';
+    items.forEach(item => {
+      const el = document.createElement('a');
+      el.className = 'upcoming-item';
+      el.href = item.link || '#';
+      el.target = '_blank';
+      el.rel = 'noopener';
+      el.innerHTML =
+        '<div class="upcoming-date">' + escHtml(item.date) + '</div>' +
+        '<div class="upcoming-title">' + escHtml(item.title) + '</div>' +
+        '<div class="upcoming-source">' + escHtml(item.source) + '</div>';
+      container.appendChild(el);
+    });
+  }
+
+  async function refreshAll() {
+    const btn = document.getElementById('refresh-btn');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = '↻ REFRESHING…';
     }
 
-    document.getElementById('refreshTopBtn').addEventListener('click', refreshAll);
-    document.getElementById('applyBtn').addEventListener('click', applyLocation);
+    await Promise.allSettled([
+      refreshIncidents(),
+      loadColumbia(),
+      loadLexington(),
+      loadMidlands(),
+      loadCurrentWx(),
+      loadForecast(),
+      loadAqi(),
+      loadAlerts(),
+      loadRecentQuakes()
+    ]);
 
-    loadSavedLocation();
-    refreshAll();
-  </script>
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '&#8635; REFRESH';
+    }
+  }
+
+  async function init() {
+    loadUpcoming();
+    document.getElementById('refresh-btn').addEventListener('click', refreshAll);
+    await refreshAll();
+  }
+
+  setInterval(refreshAll, 15 * 60 * 1000);
+
+  init();
+
+  let camTimer = null;
+
+  function isMobile() { return window.innerWidth <= 700; }
+
+  const backdrop = document.getElementById('panel-backdrop');
+  if (backdrop) {
+    backdrop.addEventListener('click', function() {
+      ['live','aircraft','cameras','fire'].forEach(function(n) { closePanel(n); });
+    });
+  }
+
+  function closePanel(name) {
+    const p = document.getElementById('panel-' + name);
+    const b = document.getElementById('btn-' + (name === 'fire' ? 'incidents' : name));
+    if (p) {
+      p.style.display = 'none';
+      p.classList.remove('sheet-full', 'sheet-mini', 'sheet-dragging');
+    }
+    if (b) b.classList.remove('active');
+    if (name === 'aircraft') document.getElementById('adsb-iframe').src = '';
+    else if (name === 'fire') document.getElementById('pulsepoint-iframe').src = '';
+    if (name === 'cameras' && camTimer) { clearInterval(camTimer); camTimer = null; }
+  }
+
+  function showBackdrop(show) {
+    if (backdrop) backdrop.classList.toggle('active', show);
+  }
+
+  window.togglePanel = function(name) {
+    const panel = document.getElementById('panel-' + name);
+    const btn = document.getElementById('btn-' + (name === 'fire' ? 'incidents' : name));
+    if (!panel) return;
+    const isOpen = panel.style.display !== 'none';
+
+    ['live','aircraft','cameras','fire'].forEach(function(n) { closePanel(n); });
+    showBackdrop(false);
+
+    if (!isOpen) {
+      panel.style.display = 'flex';
+      if (btn) btn.classList.add('active');
+
+      if (!isMobile() && panelState[name]) {
+        const s = panelState[name];
+        if (s.top != null) panel.style.top = s.top + 'px';
+        if (s.left != null) { panel.style.left = s.left + 'px'; panel.style.right = 'auto'; }
+        if (s.width != null) panel.style.width = s.width + 'px';
+        if (s.height != null) { panel.style.height = s.height + 'px'; panel.style.maxHeight = 'none'; }
+      }
+
+      if (isMobile()) {
+        showBackdrop(true);
+        panel.classList.remove('sheet-full', 'sheet-mini');
+      }
+
+      if (name === 'live') {
+        renderLiveStations();
+      } else if (name === 'aircraft') {
+        const iframe = document.getElementById('adsb-iframe');
+        if (!iframe.src || iframe.src === '' || iframe.src === location.href) {
+          iframe.src = 'https://globe.adsbexchange.com/?lat=' + CAE_LAT + '&lon=' + CAE_LON + '&zoom=10&nologo&hideSidebar';
+        }
+      } else if (name === 'cameras') {
+        loadCameras();
+      } else if (name === 'fire') {
+        const iframe = document.getElementById('pulsepoint-iframe');
+        if (!iframe.src || iframe.src === '' || iframe.src === location.href) {
+          iframe.src = 'https://web.pulsepoint.org/';
+        }
+      }
+    }
+  };
+
+  function renderLiveStations() {
+    const container = document.getElementById('live-stations');
+    if (!container || container.children.length > 0) return;
+    LIVE_STATIONS.forEach(function(st) {
+      const a = document.createElement('a');
+      a.className = 'station-link';
+      a.href = st.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML =
+        '<span class="station-dot" style="color:' + st.color + ';background:' + st.color + '"></span>' +
+        '<span class="station-info"><span class="station-name">' + st.name + '</span>' +
+        '<span class="station-desc">' + st.desc + '</span></span>' +
+        '<span class="station-arrow">&#8599;</span>';
+      container.appendChild(a);
+    });
+  }
+
+  function loadCameras() {
+    const grid = document.getElementById('cam-grid');
+    grid.innerHTML = '';
+
+    CAMERAS.forEach(function(cam) {
+      const card = document.createElement('div');
+      card.className = 'cam-card';
+
+      const video = document.createElement('video');
+      video.controls = true;
+      video.autoplay = false;
+      video.muted = true;
+      video.playsInline = true;
+
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = cam.hls;
+      } else if (window.Hls && Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(cam.hls);
+        hls.attachMedia(video);
+      }
+
+      card.appendChild(video);
+
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'cam-label';
+      labelDiv.innerHTML =
+        '<span class="cam-title">' + cam.label + '</span>' +
+        '<span class="cam-sub">' + cam.sub + '</span>';
+      card.appendChild(labelDiv);
+
+      grid.appendChild(card);
+    });
+
+    if (camTimer) clearInterval(camTimer);
+    camTimer = setInterval(function() {
+      // stream is live; timer kept for parity
+    }, 30000);
+  }
+
+  (function() {
+    if (typeof window.ontouchstart !== 'undefined' && window.innerWidth <= 700) return;
+
+    document.querySelectorAll('.float-panel .panel-header').forEach(function(header) {
+      header.addEventListener('mousedown', function(e) {
+        if (e.target.closest('.panel-close')) return;
+        if (isMobile()) return;
+        const panel = header.closest('.float-panel');
+        const panelName = panel.id.replace('panel-', '');
+        const rect = panel.getBoundingClientRect();
+        const offX = e.clientX - rect.left;
+        const offY = e.clientY - rect.top;
+        header.classList.add('dragging');
+
+        panel.querySelectorAll('iframe').forEach(function(f) { f.style.pointerEvents = 'none'; });
+
+        function onMove(ev) {
+          const x = Math.max(0, Math.min(ev.clientX - offX, window.innerWidth - 100));
+          const y = Math.max(0, Math.min(ev.clientY - offY, window.innerHeight - 40));
+          panel.style.left = x + 'px';
+          panel.style.top = y + 'px';
+          panel.style.right = 'auto';
+        }
+        function onUp() {
+          header.classList.remove('dragging');
+          panel.querySelectorAll('iframe').forEach(function(f) { f.style.pointerEvents = ''; });
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          const r = panel.getBoundingClientRect();
+          savePanelState(panelName, { top: r.top, left: r.left });
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+        e.preventDefault();
+      });
+    });
+
+    document.querySelectorAll('.panel-resize-handle').forEach(function(handle) {
+      handle.addEventListener('mousedown', function(e) {
+        if (isMobile()) return;
+        const panel = handle.closest('.float-panel');
+        const panelName = panel.id.replace('panel-', '');
+        const rect = panel.getBoundingClientRect();
+        const startX = e.clientX, startY = e.clientY;
+        const startW = rect.width, startH = rect.height;
+        const startL = rect.left;
+        const isE = handle.classList.contains('rs-e') || handle.classList.contains('rs-se');
+        const isW = handle.classList.contains('rs-w') || handle.classList.contains('rs-sw');
+        const isS = handle.classList.contains('rs-s') || handle.classList.contains('rs-se') || handle.classList.contains('rs-sw');
+
+        panel.querySelectorAll('iframe').forEach(function(f) { f.style.pointerEvents = 'none'; });
+
+        function onMove(ev) {
+          const dx = ev.clientX - startX, dy = ev.clientY - startY;
+          if (isE) { panel.style.width = Math.max(320, startW + dx) + 'px'; }
+          if (isW) {
+            const nw = Math.max(320, startW - dx);
+            panel.style.width = nw + 'px';
+            panel.style.left = (startL + startW - nw) + 'px';
+            panel.style.right = 'auto';
+          }
+          if (isS) {
+            panel.style.height = Math.max(200, startH + dy) + 'px';
+            panel.style.maxHeight = 'none';
+          }
+        }
+        function onUp() {
+          panel.querySelectorAll('iframe').forEach(function(f) { f.style.pointerEvents = ''; });
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          const r = panel.getBoundingClientRect();
+          savePanelState(panelName, { top: r.top, left: r.left, width: r.width, height: r.height });
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+        e.preventDefault();
+      });
+    });
+  })();
+
+  (function() {
+    let VH = window.innerHeight;
+    window.addEventListener('resize', function() { VH = window.innerHeight; });
+
+    document.querySelectorAll('.float-panel').forEach(function(panel) {
+      const dragHandle = panel.querySelector('.panel-drag-handle');
+      const header = panel.querySelector('.panel-header');
+      if (!dragHandle) return;
+
+      let touchStartY = 0, startH = 0, isDragging = false;
+
+      function onTouchStart(e) {
+        if (!isMobile()) return;
+        const t = e.touches[0];
+        touchStartY = t.clientY;
+        startH = panel.getBoundingClientRect().height;
+        isDragging = true;
+        panel.classList.add('sheet-dragging');
+        panel.classList.remove('sheet-full', 'sheet-mini');
+      }
+
+      function onTouchMove(e) {
+        if (!isDragging || !isMobile()) return;
+        const t = e.touches[0];
+        const dy = touchStartY - t.clientY;
+        const newH = Math.max(VH * 0.15, Math.min(VH, startH + dy));
+        panel.style.height = newH + 'px';
+        e.preventDefault();
+      }
+
+      function onTouchEnd() {
+        if (!isDragging || !isMobile()) return;
+        isDragging = false;
+        panel.classList.remove('sheet-dragging');
+        const finalH = panel.getBoundingClientRect().height;
+        const ratio = finalH / VH;
+
+        if (ratio < 0.20) {
+          const panelName = panel.id.replace('panel-', '');
+          window.togglePanel(panelName);
+        } else if (ratio < 0.45) {
+          panel.style.height = '';
+          panel.classList.add('sheet-mini');
+        } else if (ratio < 0.80) {
+          panel.style.height = '';
+          panel.classList.remove('sheet-full', 'sheet-mini');
+        } else {
+          panel.style.height = '';
+          panel.classList.add('sheet-full');
+        }
+      }
+
+      [dragHandle, header].forEach(function(el) {
+        el.addEventListener('touchstart', onTouchStart, { passive: true });
+        el.addEventListener('touchmove', onTouchMove, { passive: false });
+        el.addEventListener('touchend', onTouchEnd, { passive: true });
+      });
+    });
+  })();
+
+})();
+</script>
 </body>
 </html>
