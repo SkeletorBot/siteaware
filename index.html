@@ -2,217 +2,568 @@ html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Columbia / Lexington Situational Awareness</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SITAWARE — Columbia / Lexington, SC</title>
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --panel: #111111;
+      --panel-2: #161616;
+      --border: #252525;
+      --text: #f5f5f5;
+      --muted: #b7b7b7;
+      --accent: #c9302c;
+      --accent-2: #9d1f1d;
+      --good: #2aa34a;
+      --warn: #d6a52f;
+      --bad: #d63c36;
+      --link: #d94a44;
+      --shadow: 0 10px 24px rgba(0,0,0,0.35);
+    }
 
-<style>
+    * { box-sizing: border-box; }
 
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#0f172a;
-color:#e5e7eb;
-}
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.4;
+    }
 
-.container{
-max-width:1200px;
-margin:auto;
-padding:20px;
-}
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
 
-h1{
-margin-top:0;
-}
+    a:hover { text-decoration: underline; }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:16px;
-}
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
 
-.card{
-background:#1e293b;
-border-radius:14px;
-padding:16px;
-box-shadow:0 4px 14px rgba(0,0,0,0.4);
-}
+    .site-title {
+      margin: 0 0 14px;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
 
-.card h2{
-margin-top:0;
-}
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
 
-button{
-background:#2563eb;
-border:none;
-padding:8px 14px;
-color:white;
-border-radius:8px;
-cursor:pointer;
-}
+    .location-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
 
-ul{
-padding-left:18px;
-}
+    .location-banner button {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-.metric{
-font-size:24px;
-font-weight:bold;
-}
+    .coords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-left: auto;
+    }
 
-</style>
+    .coords input {
+      background: #191919;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      min-width: 110px;
+    }
+
+    .coords button {
+      background: #222;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .incident-bar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    .incident-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .nav-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin: 16px 0 18px;
+    }
+
+    .nav-row a { color: var(--text); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background: linear-gradient(180deg, #1c1c1c, #121212);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+      font-weight: 800;
+    }
+
+    .panel-body {
+      padding: 14px;
+    }
+
+    .embed-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .embed-placeholder {
+      min-height: 190px;
+      border: 1px dashed #3a3a3a;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--muted);
+      padding: 14px;
+      background: var(--panel-2);
+    }
+
+    .section-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .section-links a {
+      display: block;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text);
+    }
+
+    .weather-block {
+      display: grid;
+      gap: 16px;
+    }
+
+    .current-weather {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .city-name {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .big-temp {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .weather-meta {
+      color: var(--muted);
+      display: grid;
+      gap: 6px;
+    }
+
+    .mini-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mini-card:last-child { margin-bottom: 0; }
+
+    .status-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    .good { background: rgba(42,163,74,0.18); color: #98efad; }
+    .warn { background: rgba(214,165,47,0.18); color: #f3d37d; }
+    .bad { background: rgba(214,60,54,0.18); color: #ff9c97; }
+
+    .forecast-list,
+    .quake-list,
+    .alert-list,
+    .news-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .forecast-list li,
+    .quake-list li,
+    .alert-list li,
+    .news-list li {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .muted { color: var(--muted); }
+    .small { font-size: 0.9rem; }
+
+    .upcoming {
+      margin-top: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 920px) {
+      .layout,
+      .embed-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .coords {
+        margin-left: 0;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <h1 class="site-title">SITAWARE</h1>
 
-<div class="container">
+    <div class="toolbar">
+      <div class="location-banner">
+        <span id="bannerLocation">COLUMBIA / LEXINGTON, SC</span>
+        <button id="refreshTopBtn">↻ REFRESH</button>
+      </div>
 
-<h1>Columbia / Lexington Situational Awareness</h1>
+      <div class="coords">
+        <input id="cityInput" type="text" value="Columbia / Lexington, SC" aria-label="City name" />
+        <input id="latInput" type="number" step="0.0001" value="34.0007" aria-label="Latitude" />
+        <input id="lonInput" type="number" step="0.0001" value="-81.0348" aria-label="Longitude" />
+        <button id="applyBtn">Apply</button>
+      </div>
+    </div>
 
-<div style="margin-bottom:20px;">
-City:
-<input id="city" value="Columbia, SC">
+    <section class="incident-bar">
+      <div class="incident-title">Last Hour — Active Incidents</div>
+      <div id="incidentStatus">All clear — no active incidents in the last 60 minutes</div>
+      <div class="muted small" style="margin-top:8px;">Starter version: swap this section later with your preferred CAD, PulsePoint, scanner, or county dispatch source.</div>
+    </section>
 
-Lat:
-<input id="lat" value="34.0007">
+    <nav class="nav-row">
+      <a href="#live-news">▶ Live News</a>
+      <a href="#aircraft">✈ Aircraft</a>
+      <a href="#cameras">📹 Cameras</a>
+      <a href="#fireems">🔥 Fire/EMS</a>
+    </nav>
 
-Lon:
-<input id="lon" value="-81.0348">
+    <div class="layout">
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-header">Columbia / Lexington Area Feeds</div>
+          <div class="panel-body">
+            <div class="embed-grid">
+              <div class="panel" id="live-news">
+                <div class="panel-header">▶ Live News Streams</div>
+                <div class="panel-body">
+                  <div class="section-links news-links">
+                    <a href="https://www.wistv.com/" target="_blank" rel="noopener noreferrer">WIS News — Columbia</a>
+                    <a href="https://www.wltx.com/" target="_blank" rel="noopener noreferrer">WLTX News19 — Columbia</a>
+                    <a href="https://www.postandcourier.com/columbia/" target="_blank" rel="noopener noreferrer">Post and Courier Columbia</a>
+                  </div>
+                </div>
+              </div>
 
-<button onclick="refresh()">Refresh</button>
-</div>
+              <div class="panel" id="aircraft">
+                <div class="panel-header">✈ Aircraft Tracker</div>
+                <div class="panel-body">
+                  <div class="embed-placeholder">Open ADS-B Exchange for live aircraft activity over Columbia and Lexington County.</div>
+                  <div style="margin-top:10px;">
+                    <a href="https://globe.adsbexchange.com/" target="_blank" rel="noopener noreferrer">Open ADS-B Exchange</a>
+                  </div>
+                </div>
+              </div>
 
-<div class="grid">
+              <div class="panel" id="cameras">
+                <div class="panel-header">📹 Traffic Cameras — Midlands</div>
+                <div class="panel-body">
+                  <div class="embed-placeholder">Use 511SC for live South Carolina traffic cameras and road conditions.</div>
+                  <div style="margin-top:10px;">
+                    <a href="https://www.511sc.org/" target="_blank" rel="noopener noreferrer">Open 511SC Cameras</a>
+                  </div>
+                </div>
+              </div>
 
-<div class="card">
-<h2>Current Weather</h2>
-<div id="weather">Loading...</div>
-</div>
+              <div class="panel" id="fireems">
+                <div class="panel-header">🔥 Fire/EMS</div>
+                <div class="panel-body">
+                  <div class="section-links">
+                    <a href="https://www.lex-co.sc.gov/departments/emergency-management" target="_blank" rel="noopener noreferrer">Lexington County Emergency Management</a>
+                    <a href="https://www.columbiasc.gov/" target="_blank" rel="noopener noreferrer">City of Columbia</a>
+                    <a href="https://www.richlandcountysc.gov/Government/Departments/Emergency-Services" target="_blank" rel="noopener noreferrer">Richland County Emergency Services</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-<div class="card">
-<h2>Air Quality</h2>
-<div id="air">Loading...</div>
-</div>
+        <section class="panel">
+          <div class="panel-header">Regional Quick Links</div>
+          <div class="panel-body">
+            <div class="section-links">
+              <a href="https://www.weather.gov/cae/" target="_blank" rel="noopener noreferrer">National Weather Service Columbia</a>
+              <a href="https://www.scemd.org/" target="_blank" rel="noopener noreferrer">South Carolina Emergency Management Division</a>
+              <a href="https://www.airnow.gov/" target="_blank" rel="noopener noreferrer">AirNow</a>
+              <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank" rel="noopener noreferrer">USGS Earthquakes</a>
+            </div>
+          </div>
+        </section>
+      </div>
 
-<div class="card">
-<h2>3 Day Forecast</h2>
-<div id="forecast">Loading...</div>
-</div>
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-header">☁ Weather</div>
+          <div class="panel-body weather-block">
+            <div class="current-weather">
+              <div class="city-name" id="weatherCity">Columbia / Lexington, SC</div>
+              <div class="big-temp" id="weatherTemp">Loading...</div>
+              <div class="weather-meta" id="weatherMeta"></div>
+            </div>
 
-<div class="card">
-<h2>Recent Earthquakes</h2>
-<div id="quakes">Loading...</div>
-</div>
+            <div class="mini-card">
+              <strong>Air Quality — Columbia / Lexington</strong>
+              <div id="aqWrap" style="margin-top:10px;">Loading...</div>
+            </div>
 
-<div class="card">
-<h2>Local Emergency Resources</h2>
+            <div class="mini-card">
+              <strong>Active Alerts</strong>
+              <ul class="alert-list" id="alertsList" style="margin-top:10px;">
+                <li>No active alerts loaded yet</li>
+              </ul>
+            </div>
 
-<ul>
-<li><a href="https://www.lex-co.sc.gov/departments/emergency-management" target="_blank">Lexington County Emergency Management</a></li>
+            <div class="mini-card">
+              <strong>Forecast</strong>
+              <ul class="forecast-list" id="forecastList" style="margin-top:10px;">
+                <li>Loading...</li>
+              </ul>
+            </div>
 
-<li><a href="https://www.511sc.org/" target="_blank">SC Traffic Cameras</a></li>
+            <div class="mini-card">
+              <strong>Recent Earthquakes — 7d / M1.5+</strong>
+              <ul class="quake-list" id="quakeList" style="margin-top:10px;">
+                <li>Loading...</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
 
-<li><a href="https://www.weather.gov/cae/" target="_blank">National Weather Service Columbia</a></li>
+    <div class="upcoming">▶ Upcoming</div>
+  </div>
 
-<li><a href="https://www.wistv.com/" target="_blank">WIS News</a></li>
+  <script>
+    const state = {
+      city: 'Columbia / Lexington, SC',
+      lat: 34.0007,
+      lon: -81.0348
+    };
 
-<li><a href="https://www.wltx.com/" target="_blank">WLTX News 19</a></li>
+    const weatherCodeMap = {
+      0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+      45: 'Fog', 48: 'Rime fog', 51: 'Light drizzle', 53: 'Moderate drizzle',
+      55: 'Dense drizzle', 61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain',
+      71: 'Slight snow', 73: 'Moderate snow', 75: 'Heavy snow',
+      80: 'Rain showers', 81: 'Moderate showers', 82: 'Violent showers',
+      95: 'Thunderstorm', 96: 'Thunderstorm with hail', 99: 'Strong thunderstorm with hail'
+    };
 
-<li><a href="https://globe.adsbexchange.com/" target="_blank">Aircraft Tracker</a></li>
+    function saveLocation() {
+      localStorage.setItem('sitaware-city', state.city);
+      localStorage.setItem('sitaware-lat', String(state.lat));
+      localStorage.setItem('sitaware-lon', String(state.lon));
+    }
 
-<li><a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank">USGS Earthquakes</a></li>
+    function loadSavedLocation() {
+      const savedCity = localStorage.getItem('sitaware-city');
+      const savedLat = parseFloat(localStorage.getItem('sitaware-lat'));
+      const savedLon = parseFloat(localStorage.getItem('sitaware-lon'));
+      if (savedCity && !Number.isNaN(savedLat) && !Number.isNaN(savedLon)) {
+        state.city = savedCity;
+        state.lat = savedLat;
+        state.lon = savedLon;
+      }
+      document.getElementById('cityInput').value = state.city;
+      document.getElementById('latInput').value = state.lat;
+      document.getElementById('lonInput').value = state.lon;
+      renderLocation();
+    }
 
-</ul>
+    function renderLocation() {
+      document.getElementById('bannerLocation').textContent = state.city.toUpperCase();
+      document.getElementById('weatherCity').textContent = state.city;
+      document.title = `SITAWARE — ${state.city}`;
+    }
 
-</div>
+    function getAQITag(aqi) {
+      if (aqi <= 50) return '<span class="status-tag good">Good</span>';
+      if (aqi <= 100) return '<span class="status-tag warn">Moderate</span>';
+      return '<span class="status-tag bad">Poor</span>';
+    }
 
-</div>
+    async function loadWeather() {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Weather failed');
+      const data = await res.json();
+      const current = data.current;
+      document.getElementById('weatherTemp').textContent = `${Math.round(current.temperature_2m)}°`;
+      document.getElementById('weatherMeta').innerHTML = `
+        <div>${weatherCodeMap[current.weather_code] || 'Unknown conditions'}</div>
+        <div>Feels like ${Math.round(current.apparent_temperature)}°</div>
+        <div>Humidity ${current.relative_humidity_2m}%</div>
+        <div>Wind ${Math.round(current.wind_speed_10m)} mph</div>
+      `;
 
-</div>
+      const forecastHtml = data.daily.time.slice(0, 5).map((day, i) => {
+        const label = new Date(`${day}T12:00:00`).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+        return `<li><strong>${label}</strong><br><span class="muted">High ${Math.round(data.daily.temperature_2m_max[i])}° · Low ${Math.round(data.daily.temperature_2m_min[i])}° · Rain ${data.daily.precipitation_probability_max[i]}%</span></li>`;
+      }).join('');
+      document.getElementById('forecastList').innerHTML = forecastHtml;
+    }
 
-<script>
+    async function loadAirQuality() {
+      const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${state.lat}&longitude=${state.lon}&current=us_aqi,pm2_5,pm10,ozone,carbon_monoxide&timezone=auto`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('AQ failed');
+      const data = await res.json();
+      const current = data.current;
+      const aqi = Math.round(current.us_aqi || 0);
+      document.getElementById('aqWrap').innerHTML = `
+        <div><strong>AQI ${aqi}</strong> ${getAQITag(aqi)}</div>
+        <div class="muted" style="margin-top:8px;">PM2.5 ${Math.round(current.pm2_5 || 0)} · PM10 ${Math.round(current.pm10 || 0)} · Ozone ${Math.round(current.ozone || 0)}</div>
+      `;
+    }
 
-async function loadWeather(lat,lon){
+    async function loadEarthquakes() {
+      const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.5_week.geojson';
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Quakes failed');
+      const data = await res.json();
+      const items = data.features.slice(0, 6).map(item => {
+        const mag = item.properties.mag ?? 0;
+        const place = item.properties.place ?? 'Unknown';
+        return `<li><strong>M ${mag.toFixed(1)}</strong> — ${place}</li>`;
+      }).join('');
+      document.getElementById('quakeList').innerHTML = items;
+    }
 
-let url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
+    async function loadAlerts() {
+      document.getElementById('alertsList').innerHTML = `
+        <li><a href="https://www.weather.gov/cae/" target="_blank" rel="noopener noreferrer">Check NWS Columbia for active weather alerts</a></li>
+        <li><a href="https://www.scemd.org/" target="_blank" rel="noopener noreferrer">Check SCEMD for statewide alerts</a></li>
+      `;
+    }
 
-let res=await fetch(url);
+    async function refreshAll() {
+      document.getElementById('weatherTemp').textContent = 'Loading...';
+      document.getElementById('forecastList').innerHTML = '<li>Loading...</li>';
+      document.getElementById('aqWrap').textContent = 'Loading...';
+      document.getElementById('quakeList').innerHTML = '<li>Loading...</li>';
+      await Promise.allSettled([loadWeather(), loadAirQuality(), loadEarthquakes(), loadAlerts()]);
+    }
 
-let data=await res.json();
+    function applyLocation() {
+      const city = document.getElementById('cityInput').value.trim();
+      const lat = parseFloat(document.getElementById('latInput').value);
+      const lon = parseFloat(document.getElementById('lonInput').value);
+      if (!city || Number.isNaN(lat) || Number.isNaN(lon)) {
+        alert('Please enter a valid city, latitude, and longitude.');
+        return;
+      }
+      state.city = city;
+      state.lat = lat;
+      state.lon = lon;
+      saveLocation();
+      renderLocation();
+      refreshAll();
+    }
 
-document.getElementById("weather").innerHTML=
-"<div class='metric'>"+data.current.temperature_2m+"°</div>"+
-"Wind "+data.current.wind_speed_10m+" mph";
+    document.getElementById('refreshTopBtn').addEventListener('click', refreshAll);
+    document.getElementById('applyBtn').addEventListener('click', applyLocation);
 
-let forecastHTML="";
-
-for(let i=0;i<3;i++){
-
-forecastHTML+=
-"<p>"+
-data.daily.time[i]+"<br>"+
-"High "+data.daily.temperature_2m_max[i]+"°"+
-" Low "+data.daily.temperature_2m_min[i]+"°"+
-"</p>";
-
-}
-
-document.getElementById("forecast").innerHTML=forecastHTML;
-
-}
-
-async function loadAir(lat,lon){
-
-let url=`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`;
-
-let res=await fetch(url);
-
-let data=await res.json();
-
-document.getElementById("air").innerHTML=
-"<div class='metric'>AQI "+data.current.us_aqi+"</div>";
-
-}
-
-async function loadQuakes(){
-
-let url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
-
-let res=await fetch(url);
-
-let data=await res.json();
-
-let html="<ul>";
-
-data.features.slice(0,5).forEach(q=>{
-
-html+="<li>M"+q.properties.mag+" — "+q.properties.place+"</li>";
-
-});
-
-html+="</ul>";
-
-document.getElementById("quakes").innerHTML=html;
-
-}
-
-function refresh(){
-
-let lat=document.getElementById("lat").value;
-
-let lon=document.getElementById("lon").value;
-
-loadWeather(lat,lon);
-
-loadAir(lat,lon);
-
-loadQuakes();
-
-}
-
-refresh();
-
-</script>
-
+    loadSavedLocation();
+    refreshAll();
+  </script>
 </body>
 </html>
