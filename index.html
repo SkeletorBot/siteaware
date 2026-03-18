@@ -1617,15 +1617,20 @@ async function loadScMesh() {
     }
   }
 
-  function loadColumbia() {
-    return loadFeedColumn('columbia-feed', 'columbia-count', [
-      {
-        name: 'WIS / Google News',
-        url: 'https://news.google.com/rss/search?q=site:wistv.com+(Columbia+OR+Richland+OR+West+Columbia)+when:7d&hl=en-US&gl=US&ceid=US:en',
-        geoClass: 'geo-columbia'
-      }
-    ], { filter: true });
-  }
+ function loadColumbia() {
+  return loadFeedColumn('columbia-feed', 'columbia-count', [
+    {
+      name: 'WIS',
+      url: 'https://news.google.com/rss/search?q=site:wistv.com+(Columbia+OR+Richland+OR+West+Columbia)+when:7d&hl=en-US&gl=US&ceid=US:en',
+      geoClass: 'geo-columbia'
+    },
+    {
+      name: 'WLTX',
+      url: 'https://news.google.com/rss/search?q=site:wltx.com+(Columbia+OR+Lexington+OR+Richland)+when:7d&hl=en-US&gl=US&ceid=US:en',
+      geoClass: 'geo-columbia'
+    }
+  ], { filter: true });
+}
 
   function degToCompass(deg) {
     const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
