@@ -1034,6 +1034,44 @@ body::after {
       <div class="ops-time-value" id="time-la"></div>
     </div>
   </div>
+
+function updateOpsTimes() {
+  const opts = {
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  };
+
+  const now = new Date();
+
+  const nyEl = document.getElementById('time-ny');
+  const chicagoEl = document.getElementById('time-chicago');
+  const slcEl = document.getElementById('time-slc');
+  const laEl = document.getElementById('time-la');
+
+  if (nyEl) {
+    nyEl.textContent = now.toLocaleTimeString('en-US', { ...opts, timeZone: 'America/New_York' });
+  }
+
+  if (chicagoEl) {
+    chicagoEl.textContent = now.toLocaleTimeString('en-US', { ...opts, timeZone: 'America/Chicago' });
+  }
+
+  if (slcEl) {
+    slcEl.textContent = now.toLocaleTimeString('en-US', { ...opts, timeZone: 'America/Denver' });
+  }
+
+  if (laEl) {
+    laEl.textContent = now.toLocaleTimeString('en-US', { ...opts, timeZone: 'America/Los_Angeles' });
+  }
+}
+
+                                                        document.addEventListener('DOMContentLoaded', function() {
+  updateOpsTimes();
+  setInterval(updateOpsTimes, 1000);
+});
+  
 </section>
   
 </style>
