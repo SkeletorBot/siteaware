@@ -1566,7 +1566,16 @@ async function loadScMesh() {
   container.innerHTML = '';
 
   try {
-    const data = await fetchJson('https://meshview.scmesh.us/api/chat');
+    let data;
+
+    try {
+      data = await fetchJson('https://meshview.scmesh.us/api/chat');
+    } catch (directError) {
+      const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://meshview.scmesh.us/api/chat');
+      const proxyData = await fetchJson(proxyUrl);
+      data = JSON.parse(proxyData.contents);
+    }
+
     const packets = (data.packets || [])
       .filter(p => p && p.payload)
       .sort((a, b) => new Date(b.import_time) - new Date(a.import_time))
@@ -1586,7 +1595,6 @@ async function loadScMesh() {
     console.warn('SC Mesh chat:', e);
   }
 }
-
   async function loadBlueskyColumn() {
     const container = document.getElementById('bsky-feed');
     const countEl = document.getElementById('bsky-count');
