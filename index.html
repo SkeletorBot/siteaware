@@ -1033,7 +1033,7 @@ body::after {
 <div class="toolbar-row">
   <button class="toolbar-btn" id="btn-live" onclick="togglePanel('live')">&#9654; LIVE NEWS</button>
   <button class="toolbar-btn" id="btn-aircraft" onclick="togglePanel('aircraft')">&#9992; AIRCRAFT</button>
-  <button class="toolbar-btn" id="btn-cameras" onclick="togglePanel('cameras')">&#128249; CAMERAS</button>
+  <button class="toolbar-btn" id="btn-cameras" onclick="togglePanel('cameras')">&#128249; WX RADAR</button>
   <button class="toolbar-btn" id="btn-incidents" onclick="togglePanel('fire')">&#128293; FIRE/EMS</button>
 </div>
 
@@ -1071,21 +1071,26 @@ body::after {
   </div>
 </div>
 
-<div class="float-panel" id="panel-cameras" style="display:none; width:580px;">
+<div class="float-panel" id="panel-radar" style="display:none; width:720px;">
   <div class="panel-drag-handle"><span class="handle-bar"></span></div>
+
   <div class="panel-header">
-    <h3>&#128249; Traffic Cameras — I-20 E @ MM 62</h3>
-    <button class="panel-close" onclick="togglePanel('cameras')">&times;</button>
+    <h3>&#127777; NWS Radar — KCAE</h3>
+    <button class="panel-close" onclick="togglePanel('radar')">&times;</button>
   </div>
+
   <div class="panel-resize-handle rs-e"></div>
   <div class="panel-resize-handle rs-w"></div>
   <div class="panel-resize-handle rs-s"></div>
   <div class="panel-resize-handle rs-se"></div>
   <div class="panel-resize-handle rs-sw"></div>
-  <div class="panel-body" style="min-height:auto;">
-    <div class="cam-grid" id="cam-grid"></div>
+
+  <div class="panel-body" style="min-height:420px;">
+    <iframe
+      src="https://radar.weather.gov/station/KCAE/standard"
+      style="width:100%; height:420px; border:none;">
+    </iframe>
   </div>
-  <div class="panel-note">Camera 147 loaded as a custom HLS stream.</div>
 </div>
 
 <div class="float-panel" id="panel-fire" style="display:none; width:580px;">
