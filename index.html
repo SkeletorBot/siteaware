@@ -1921,10 +1921,11 @@ async function loadScMesh() {
       btn.textContent = '↻ REFRESHING…';
     }
 
+   loadScMesh();   // start immediately
+    
     await Promise.allSettled([
       refreshIncidents(),
       loadColumbia(),
-      loadScMesh(),
       loadBlueskyColumn(),
       loadCurrentWx(),
       loadForecast(),
