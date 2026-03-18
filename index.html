@@ -33,7 +33,7 @@
   --purple: #a855f7;
   --columbia: #22c55e;
   --scmesh: #3b82f6;
-  --midlands: #a855f7;
+  --bsky: #a855f7;
   --font: 'JetBrains Mono', 'Consolas', 'SF Mono', monospace;
   --radius: 4px;
 }
@@ -64,7 +64,6 @@ body::after {
   );
 }
 
-/* HEADER */
 .site-header {
   display: flex;
   align-items: center;
@@ -109,7 +108,6 @@ body::after {
 
 .header-meta .clock { color: var(--text-secondary); }
 
-/* INCIDENT BAR */
 .incident-bar {
   border-bottom: 1px solid var(--border);
   padding: 12px 16px;
@@ -239,7 +237,6 @@ body::after {
   gap: 8px;
 }
 
-/* MAIN GRID */
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 300px;
@@ -287,7 +284,7 @@ body::after {
 
 .col-columbia .geo-dot { background: var(--columbia); box-shadow: 0 0 4px var(--columbia); }
 .col-scmesh .geo-dot { background: var(--scmesh); box-shadow: 0 0 4px var(--scmesh); }
-.col-midlands .geo-dot { background: var(--midlands); box-shadow: 0 0 4px var(--midlands); }
+.col-bsky .geo-dot { background: var(--bsky); box-shadow: 0 0 4px var(--bsky); }
 
 .col-header .col-count {
   font-size: 0.65rem;
@@ -304,7 +301,6 @@ body::after {
   gap: 6px;
 }
 
-/* NEWS CARDS */
 .news-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -334,7 +330,8 @@ body::after {
 }
 
 .news-card .nc-source .src-dot {
-  width: 4px; height: 4px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   display: inline-block;
 }
@@ -343,8 +340,8 @@ body::after {
 .geo-columbia { color: var(--columbia); }
 .geo-scmesh .src-dot { background: var(--scmesh); }
 .geo-scmesh { color: var(--scmesh); }
-.geo-midlands .src-dot { background: var(--midlands); }
-.geo-midlands { color: var(--midlands); }
+.geo-bsky .src-dot { background: var(--bsky); }
+.geo-bsky { color: var(--bsky); }
 
 .news-card .nc-headline {
   font-size: 0.8rem;
@@ -362,7 +359,6 @@ body::after {
   margin-top: 6px;
 }
 
-/* WEATHER PANEL */
 .weather-panel .col-header h2 { color: var(--cyan); }
 
 .wx-section {
@@ -480,6 +476,7 @@ body::after {
   min-width: 55px;
   font-size: 0.6rem;
 }
+
 .forecast-desc {
   color: var(--text-secondary);
   flex: 1;
@@ -490,6 +487,7 @@ body::after {
   white-space: nowrap;
   padding: 0 8px;
 }
+
 .forecast-temp { color: var(--text-primary); text-align: right; white-space: nowrap; }
 .forecast-temp-night { color: var(--text-dim); }
 
@@ -543,8 +541,19 @@ body::after {
 .quake-mag.med { color: var(--amber); background: rgba(245,158,11,0.1); }
 .quake-mag.high { color: var(--red); background: rgba(239,68,68,0.1); }
 
-.quake-place { color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.quake-time { color: var(--text-dim); font-size: 0.6rem; white-space: nowrap; }
+.quake-place {
+  color: var(--text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quake-time {
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  white-space: nowrap;
+}
 
 .upcoming-bar {
   padding: 12px 16px;
@@ -850,7 +859,12 @@ body::after {
   box-shadow: 0 0 6px currentColor;
 }
 
-.station-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.station-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
 
 .station-name {
   font-size: 0.8rem;
@@ -923,6 +937,7 @@ body::after {
     border-radius: 16px 16px 0 0;
     touch-action: none;
   }
+
   .panel-drag-handle .handle-bar {
     width: 36px;
     height: 4px;
@@ -1111,12 +1126,12 @@ body::after {
     </div>
   </div>
 
-  <div class="column col-midlands">
+  <div class="column col-bsky">
     <div class="col-header">
-      <h2><span class="geo-dot"></span> Midlands</h2>
-      <span class="col-count" id="midlands-count"></span>
+      <h2><span class="geo-dot"></span> 404 Media BlueSky</h2>
+      <span class="col-count" id="bsky-count"></span>
     </div>
-    <div class="col-body" id="midlands-feed">
+    <div class="col-body" id="bsky-feed">
       <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
     </div>
   </div>
@@ -1169,6 +1184,8 @@ body::after {
   const INCIDENT_MAX_AGE_MS = 60 * 60 * 1000;
   const NEWS_MAX_ITEMS = 12;
   const SCMESH_MAX_ITEMS = 20;
+  const BSKY_MAX_ITEMS = 10;
+  const BSKY_HANDLE = '404media.co';
 
   const NWS_ZONES = ['SCZ027', 'SCZ028'];
   const WX_STATIONS = ['KCAE', 'KCUB'];
@@ -1244,10 +1261,7 @@ body::after {
 
   async function fetchJson(url) {
     const r = await fetch(url, {
-      headers: {
-        'Accept': 'application/geo+json,application/json',
-        'User-Agent': 'sitaware-midlands/1.0'
-      }
+      headers: { 'Accept': 'application/geo+json,application/json' }
     });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     return r.json();
@@ -1344,6 +1358,50 @@ body::after {
       '<div class="nc-time">' + relTime(when) + '</div>';
 
     return card;
+  }
+
+  function renderBlueskyCard(item) {
+    const post = item.post || {};
+    const author = post.author?.displayName || post.author?.handle || '404 Media';
+    const handle = post.author?.handle || BSKY_HANDLE;
+    const text = post.record?.text || '';
+    const indexedAt = post.indexedAt || new Date().toISOString();
+    const uri = post.uri || '';
+
+    let postUrl = '#';
+    if (handle && uri) {
+      const parts = uri.split('/');
+      const postId = parts[parts.length - 1];
+      postUrl = 'https://bsky.app/profile/' + handle + '/post/' + postId;
+    }
+
+    const card = document.createElement('a');
+    card.className = 'news-card';
+    card.href = postUrl;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.innerHTML =
+      '<div class="nc-source geo-bsky"><span class="src-dot"></span> Bluesky · ' + escHtml(author) + '</div>' +
+      '<div class="nc-headline">' + escHtml(text) + '</div>' +
+      '<div class="nc-time">' + relTime(indexedAt) + '</div>';
+    return card;
+  }
+
+  async function resolveBlueskyHandle(handle) {
+    const url = 'https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=' + encodeURIComponent(handle);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to resolve Bluesky handle');
+    return res.json();
+  }
+
+  async function fetchBlueskyFeed(handle) {
+    const resolved = await resolveBlueskyHandle(handle);
+    const actor = resolved.did || handle;
+    const url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' +
+      encodeURIComponent(actor) + '&limit=' + BSKY_MAX_ITEMS;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch Bluesky feed');
+    return res.json();
   }
 
   function updateClock() {
@@ -1529,22 +1587,36 @@ body::after {
     }
   }
 
+  async function loadBlueskyColumn() {
+    const container = document.getElementById('bsky-feed');
+    const countEl = document.getElementById('bsky-count');
+    container.innerHTML = '';
+
+    try {
+      const data = await fetchBlueskyFeed(BSKY_HANDLE);
+      const items = (data.feed || []).slice(0, BSKY_MAX_ITEMS);
+
+      if (!items.length) {
+        container.innerHTML = '<div class="empty-text">No Bluesky posts loaded</div>';
+        if (countEl) countEl.textContent = '0 items';
+        return;
+      }
+
+      items.forEach(item => container.appendChild(renderBlueskyCard(item)));
+      if (countEl) countEl.textContent = items.length + ' items';
+    } catch (e) {
+      container.innerHTML = '<div class="empty-text">Failed to load Bluesky feed</div>';
+      if (countEl) countEl.textContent = '';
+      console.warn('Bluesky feed:', e);
+    }
+  }
+
   function loadColumbia() {
     return loadFeedColumn('columbia-feed', 'columbia-count', [
       {
         name: 'WIS / Google News',
         url: 'https://news.google.com/rss/search?q=site:wistv.com+(Columbia+OR+Richland+OR+West+Columbia)+when:7d&hl=en-US&gl=US&ceid=US:en',
         geoClass: 'geo-columbia'
-      }
-    ], { filter: true });
-  }
-
-  function loadMidlands() {
-    return loadFeedColumn('midlands-feed', 'midlands-count', [
-      {
-        name: 'Post and Courier Columbia / Google News',
-        url: 'https://news.google.com/rss/search?q=(site:postandcourier.com+Columbia+SC)+when:7d&hl=en-US&gl=US&ceid=US:en',
-        geoClass: 'geo-midlands'
       }
     ], { filter: true });
   }
@@ -1815,7 +1887,7 @@ body::after {
       { date: 'NWS CAE', title: 'Columbia office forecast and alerts', source: 'weather.gov/cae', link: 'https://www.weather.gov/cae/' },
       { date: 'SCEMD', title: 'Emergency Alerts and CodeRED', source: 'scemd.org', link: 'https://www.scemd.org/stay-informed/emergency-alerts/' },
       { date: 'SC MESH', title: 'Meshview chat and network activity', source: 'meshview.scmesh.us', link: 'https://meshview.scmesh.us/chat' },
-      { date: '511SC', title: 'Traffic cameras and road conditions', source: '511sc.org', link: 'https://www.511sc.org/' }
+      { date: '404 MEDIA', title: '404 Media on Bluesky', source: 'bsky.app', link: 'https://bsky.app/profile/404media.co' }
     ];
 
     const container = document.getElementById('upcoming-items');
@@ -1845,7 +1917,7 @@ body::after {
       refreshIncidents(),
       loadColumbia(),
       loadScMesh(),
-      loadMidlands(),
+      loadBlueskyColumn(),
       loadCurrentWx(),
       loadForecast(),
       loadAqi(),
@@ -2019,6 +2091,7 @@ body::after {
           panel.style.top = y + 'px';
           panel.style.right = 'auto';
         }
+
         function onUp() {
           header.classList.remove('dragging');
           panel.querySelectorAll('iframe').forEach(function(f) { f.style.pointerEvents = ''; });
@@ -2027,6 +2100,7 @@ body::after {
           const r = panel.getBoundingClientRect();
           savePanelState(panelName, { top: r.top, left: r.left });
         }
+
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
         e.preventDefault();
@@ -2062,6 +2136,7 @@ body::after {
             panel.style.maxHeight = 'none';
           }
         }
+
         function onUp() {
           panel.querySelectorAll('iframe').forEach(function(f) { f.style.pointerEvents = ''; });
           document.removeEventListener('mousemove', onMove);
@@ -2069,6 +2144,7 @@ body::after {
           const r = panel.getBoundingClientRect();
           savePanelState(panelName, { top: r.top, left: r.left, width: r.width, height: r.height });
         }
+
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
         e.preventDefault();
@@ -2135,7 +2211,6 @@ body::after {
       });
     });
   })();
-
 })();
 </script>
 </body>
