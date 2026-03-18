@@ -1131,15 +1131,15 @@ body::after {
     </div>
   </div>
 
-  <div class="column col-bsky">
-    <div class="col-header">
-      <h2><span class="geo-dot"></span> 404 Media BlueSky</h2>
-      <span class="col-count" id="bsky-count"></span>
-    </div>
-    <div class="col-body" id="bsky-feed">
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-    </div>
+ <div class="column col-bsky">
+  <div class="col-header">
+    <h2><span class="geo-dot"></span> 404 Media</h2>
+    <span class="col-count" id="bsky-count"></span>
   </div>
+  <div class="col-body" id="bsky-feed">
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+  </div>
+</div>
 
   <div class="column weather-panel">
     <div class="col-header">
@@ -1392,21 +1392,14 @@ body::after {
     return card;
   }
 
-  async function resolveBlueskyHandle(handle) {
-    const url = 'https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=' + encodeURIComponent(handle);
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to resolve Bluesky handle');
-    return res.json();
-  }
-
-  async function fetchBlueskyFeed(handle) {
-    const resolved = await resolveBlueskyHandle(handle);
-    const actor = resolved.did || handle;
-    const url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' +
-      encodeURIComponent(actor) + '&limit=' + BSKY_MAX_ITEMS;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to fetch Bluesky feed');
-    return res.json();
+ function load404Media() {
+  return loadFeedColumn('bsky-feed', 'bsky-count', [
+    {
+      name: '404 Media',
+      url: 'https://www.404media.co/rss/',
+      geoClass: 'geo-bsky'
+    }
+  ], { filter: false });
   }
 
   function updateClock() {
