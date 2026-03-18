@@ -1,1 +1,218 @@
 index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Columbia / Lexington Situational Awareness</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#0f172a;
+color:#e5e7eb;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+margin-top:0;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:16px;
+}
+
+.card{
+background:#1e293b;
+border-radius:14px;
+padding:16px;
+box-shadow:0 4px 14px rgba(0,0,0,0.4);
+}
+
+.card h2{
+margin-top:0;
+}
+
+button{
+background:#2563eb;
+border:none;
+padding:8px 14px;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+ul{
+padding-left:18px;
+}
+
+.metric{
+font-size:24px;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Columbia / Lexington Situational Awareness</h1>
+
+<div style="margin-bottom:20px;">
+City:
+<input id="city" value="Columbia, SC">
+
+Lat:
+<input id="lat" value="34.0007">
+
+Lon:
+<input id="lon" value="-81.0348">
+
+<button onclick="refresh()">Refresh</button>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>Current Weather</h2>
+<div id="weather">Loading...</div>
+</div>
+
+<div class="card">
+<h2>Air Quality</h2>
+<div id="air">Loading...</div>
+</div>
+
+<div class="card">
+<h2>3 Day Forecast</h2>
+<div id="forecast">Loading...</div>
+</div>
+
+<div class="card">
+<h2>Recent Earthquakes</h2>
+<div id="quakes">Loading...</div>
+</div>
+
+<div class="card">
+<h2>Local Emergency Resources</h2>
+
+<ul>
+<li><a href="https://www.lex-co.sc.gov/departments/emergency-management" target="_blank">Lexington County Emergency Management</a></li>
+
+<li><a href="https://www.511sc.org/" target="_blank">SC Traffic Cameras</a></li>
+
+<li><a href="https://www.weather.gov/cae/" target="_blank">National Weather Service Columbia</a></li>
+
+<li><a href="https://www.wistv.com/" target="_blank">WIS News</a></li>
+
+<li><a href="https://www.wltx.com/" target="_blank">WLTX News 19</a></li>
+
+<li><a href="https://globe.adsbexchange.com/" target="_blank">Aircraft Tracker</a></li>
+
+<li><a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank">USGS Earthquakes</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function loadWeather(lat,lon){
+
+let url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
+
+let res=await fetch(url);
+
+let data=await res.json();
+
+document.getElementById("weather").innerHTML=
+"<div class='metric'>"+data.current.temperature_2m+"°</div>"+
+"Wind "+data.current.wind_speed_10m+" mph";
+
+let forecastHTML="";
+
+for(let i=0;i<3;i++){
+
+forecastHTML+=
+"<p>"+
+data.daily.time[i]+"<br>"+
+"High "+data.daily.temperature_2m_max[i]+"°"+
+" Low "+data.daily.temperature_2m_min[i]+"°"+
+"</p>";
+
+}
+
+document.getElementById("forecast").innerHTML=forecastHTML;
+
+}
+
+async function loadAir(lat,lon){
+
+let url=`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`;
+
+let res=await fetch(url);
+
+let data=await res.json();
+
+document.getElementById("air").innerHTML=
+"<div class='metric'>AQI "+data.current.us_aqi+"</div>";
+
+}
+
+async function loadQuakes(){
+
+let url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+
+let res=await fetch(url);
+
+let data=await res.json();
+
+let html="<ul>";
+
+data.features.slice(0,5).forEach(q=>{
+
+html+="<li>M"+q.properties.mag+" — "+q.properties.place+"</li>";
+
+});
+
+html+="</ul>";
+
+document.getElementById("quakes").innerHTML=html;
+
+}
+
+function refresh(){
+
+let lat=document.getElementById("lat").value;
+
+let lon=document.getElementById("lon").value;
+
+loadWeather(lat,lon);
+
+loadAir(lat,lon);
+
+loadQuakes();
+
+}
+
+refresh();
+
+</script>
+
+</body>
+</html>
