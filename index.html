@@ -284,7 +284,7 @@ body::after {
 
 .col-columbia .geo-dot { background: var(--columbia); box-shadow: 0 0 4px var(--columbia); }
 .col-scmesh .geo-dot { background: var(--scmesh); box-shadow: 0 0 4px var(--scmesh); }
-.col-apnews .geo-dot { background: var(--purple); box-shadow: 0 0 4px var(--purple); }
+.col-bsky .geo-dot { background: var(--bsky); box-shadow: 0 0 4px var(--bsky); }
 
 .col-header .col-count {
   font-size: 0.65rem;
@@ -340,9 +340,9 @@ body::after {
 .geo-columbia { color: var(--columbia); }
 .geo-scmesh .src-dot { background: var(--scmesh); }
 .geo-scmesh { color: var(--scmesh); }
-.geo-apnews .src-dot { background: var(--purple); }
-.geo-apnews { color: var(--purple); }
-  
+.geo-bsky .src-dot { background: var(--bsky); }
+.geo-bsky { color: var(--bsky); }
+
 .news-card .nc-headline {
   font-size: 0.8rem;
   font-weight: 400;
@@ -1131,15 +1131,15 @@ body::after {
     </div>
   </div>
 
- <div class="column col-apnews">
-  <div class="col-header">
-    <h2><span class="geo-dot"></span> AP News</h2>
-    <span class="col-count" id="apnews-count"></span>
+  <div class="column col-bsky">
+    <div class="col-header">
+      <h2><span class="geo-dot"></span> 404 Media BlueSky</h2>
+      <span class="col-count" id="bsky-count"></span>
+    </div>
+    <div class="col-body" id="bsky-feed">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
   </div>
-  <div class="col-body" id="apnews-feed">
-    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-  </div>
-</div>
 
   <div class="column weather-panel">
     <div class="col-header">
@@ -1188,7 +1188,9 @@ body::after {
 
   const INCIDENT_MAX_AGE_MS = 60 * 60 * 1000;
   const NEWS_MAX_ITEMS = 12;
-  const SCMESH_MAX_ITEMS = 12;
+  const SCMESH_MAX_ITEMS = 20;
+  const BSKY_MAX_ITEMS = 10;
+  const BSKY_HANDLE = '404media.co';
 
   const NWS_ZONES = ['SCZ027', 'SCZ028'];
   const WX_STATIONS = ['KCAE', 'KCUB'];
@@ -1390,15 +1392,22 @@ body::after {
     return card;
   }
 
-<div class="column col-apnews">
-  <div class="col-header">
-    <h2><span class="geo-dot"></span> AP News</h2>
-    <span class="col-count" id="apnews-count"></span>
-  </div>
-  <div class="col-body" id="apnews-feed">
-    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-  </div>
-</div>
+  async function resolveBlueskyHandle(handle) {
+    const url = 'https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=' + encodeURIComponent(handle);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to resolve Bluesky handle');
+    return res.json();
+  }
+
+  async function fetchBlueskyFeed(handle) {
+    const resolved = await resolveBlueskyHandle(handle);
+    const actor = resolved.did || handle;
+    const url = 'https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' +
+      encodeURIComponent(actor) + '&limit=' + BSKY_MAX_ITEMS;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch Bluesky feed');
+    return res.json();
+  }
 
   function updateClock() {
     const now = new Date();
@@ -1591,6 +1600,10 @@ async function loadScMesh() {
     console.warn('SC Mesh chat:', e);
   }
 }
+  async function loadBlueskyColumn() {
+    const container = document.getElementById('bsky-feed');
+    const countEl = document.getElementById('bsky-count');
+    container.innerHTML = '';
 
     try {
       const data = await fetchBlueskyFeed(BSKY_HANDLE);
@@ -1611,25 +1624,15 @@ async function loadScMesh() {
     }
   }
 
-function loadColumbia() {
-  return loadFeedColumn('columbia-feed', 'columbia-count', [
-    {
-      name: 'WIS',
-      url: 'https://news.google.com/rss/search?q=site:wistv.com+(Columbia+OR+Richland+OR+West+Columbia)+when:7d&hl=en-US&gl=US&ceid=US:en',
-      geoClass: 'geo-columbia'
-    },
-    {
-      name: 'WLTX',
-      url: 'https://news.google.com/rss/search?q=site:wltx.com+(Columbia+OR+Lexington+OR+Richland)+when:7d&hl=en-US&gl=US&ceid=US:en',
-      geoClass: 'geo-columbia'
-    },
-    {
-      name: 'The State',
-      url: 'https://news.google.com/rss/search?q=site:thestate.com+(Columbia+SC+OR+Richland+County+OR+Lexington+County)+when:7d&hl=en-US&gl=US&ceid=US:en',
-      geoClass: 'geo-columbia'
-    }
-  ], { filter: true });
-}
+  function loadColumbia() {
+    return loadFeedColumn('columbia-feed', 'columbia-count', [
+      {
+        name: 'WIS / Google News',
+        url: 'https://news.google.com/rss/search?q=site:wistv.com+(Columbia+OR+Richland+OR+West+Columbia)+when:7d&hl=en-US&gl=US&ceid=US:en',
+        geoClass: 'geo-columbia'
+      }
+    ], { filter: true });
+  }
 
   function degToCompass(deg) {
     const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
@@ -1928,7 +1931,7 @@ function loadColumbia() {
     await Promise.allSettled([
       refreshIncidents(),
       loadColumbia(),
-      loadAPNews(),
+      loadBlueskyColumn(),
       loadCurrentWx(),
       loadForecast(),
       loadAqi(),
