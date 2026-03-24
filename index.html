@@ -1591,10 +1591,6 @@ async function loadScMesh() {
     console.warn('SC Mesh chat:', e);
   }
 }
-  async function loadBlueskyColumn() {
-    const container = document.getElementById('bsky-feed');
-    const countEl = document.getElementById('bsky-count');
-    container.innerHTML = '';
 
     try {
       const data = await fetchBlueskyFeed(BSKY_HANDLE);
