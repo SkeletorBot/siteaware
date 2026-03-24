@@ -1961,7 +1961,7 @@ async function loadScMesh() {
   const backdrop = document.getElementById('panel-backdrop');
   if (backdrop) {
     backdrop.addEventListener('click', function() {
-      ['live','aircraft','cameras','fire'].forEach(function(n) { closePanel(n); });
+      ['live','aircraft','radar','fire'].forEach(function(n) { closePanel(n); });
     });
   }
 
@@ -1973,9 +1973,8 @@ async function loadScMesh() {
       p.classList.remove('sheet-full', 'sheet-mini', 'sheet-dragging');
     }
     if (b) b.classList.remove('active');
-    if (name === 'aircraft') document.getElementById('adsb-iframe').src = '';
+        if (name === 'aircraft') document.getElementById('adsb-iframe').src = '';
     else if (name === 'fire') document.getElementById('pulsepoint-iframe').src = '';
-    if (name === 'cameras' && camTimer) { clearInterval(camTimer); camTimer = null; }
   }
 
   function showBackdrop(show) {
@@ -2008,15 +2007,15 @@ async function loadScMesh() {
         panel.classList.remove('sheet-full', 'sheet-mini');
       }
 
-      if (name === 'live') {
+            if (name === 'live') {
         renderLiveStations();
       } else if (name === 'aircraft') {
         const iframe = document.getElementById('adsb-iframe');
         if (!iframe.src || iframe.src === '' || iframe.src === location.href) {
           iframe.src = 'https://globe.adsbexchange.com/?lat=' + CAE_LAT + '&lon=' + CAE_LON + '&zoom=10&nologo&hideSidebar';
         }
-      } else if (name === 'cameras') {
-        loadCameras();
+      } else if (name === 'radar') {
+        // radar iframe is already set in HTML
       } else if (name === 'fire') {
         const iframe = document.getElementById('pulsepoint-iframe');
         if (!iframe.src || iframe.src === '' || iframe.src === location.href) {
