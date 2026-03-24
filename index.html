@@ -284,7 +284,7 @@ body::after {
 
 .col-columbia .geo-dot { background: var(--columbia); box-shadow: 0 0 4px var(--columbia); }
 .col-scmesh .geo-dot { background: var(--scmesh); box-shadow: 0 0 4px var(--scmesh); }
-.col-bsky .geo-dot { background: var(--bsky); box-shadow: 0 0 4px var(--bsky); }
+.col-apnews .geo-dot { background: var(--purple); box-shadow: 0 0 4px var(--purple); }
 
 .col-header .col-count {
   font-size: 0.65rem;
@@ -340,9 +340,9 @@ body::after {
 .geo-columbia { color: var(--columbia); }
 .geo-scmesh .src-dot { background: var(--scmesh); }
 .geo-scmesh { color: var(--scmesh); }
-.geo-bsky .src-dot { background: var(--bsky); }
-.geo-bsky { color: var(--bsky); }
-
+.geo-apnews .src-dot { background: var(--purple); }
+.geo-apnews { color: var(--purple); }
+  
 .news-card .nc-headline {
   font-size: 0.8rem;
   font-weight: 400;
@@ -1188,9 +1188,7 @@ body::after {
 
   const INCIDENT_MAX_AGE_MS = 60 * 60 * 1000;
   const NEWS_MAX_ITEMS = 12;
-  const SCMESH_MAX_ITEMS = 20;
-  const BSKY_MAX_ITEMS = 10;
-  const BSKY_HANDLE = '404media.co';
+  const SCMESH_MAX_ITEMS = 12;
 
   const NWS_ZONES = ['SCZ027', 'SCZ028'];
   const WX_STATIONS = ['KCAE', 'KCUB'];
@@ -1934,7 +1932,7 @@ function loadColumbia() {
     await Promise.allSettled([
       refreshIncidents(),
       loadColumbia(),
-      load404Media(),
+      loadAPNews(),
       loadCurrentWx(),
       loadForecast(),
       loadAqi(),
