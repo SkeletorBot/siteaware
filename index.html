@@ -1630,57 +1630,82 @@ async function loadScMesh() {
     }
   }
 
-  async function loadColumbia() {
+async function loadColumbia() {
   const container = document.getElementById('columbia-feed');
   const countEl = document.getElementById('columbia-count');
   container.innerHTML = '';
 
   try {
-    const data = await fetchBlueskyFeed(WIS_BSKY_HANDLE);
-    const items = (data.feed || []).slice(0, WIS_MAX_ITEMS);
+    const results = await Promise.allSettled(
+      COLUMBIA_BSKY_HANDLES.map(handle => fetchBlueskyFeed(handle))
+    );
 
-    if (!items.length) {
-      container.innerHTML = '<div class="empty-text">No WIS posts loaded</div>';
+    let allItems = [];
+
+    results.forEach((r, index) => {
+      if (r.status !== 'fulfilled') return;
+
+      const handle = COLUMBIA_BSKY_HANDLES[index];
+
+      (r.value.feed || []).forEach(item => {
+        const post = item.post || {};
+
+        allItems.push({
+          text: post.record?.text || '',
+          indexedAt: post.indexedAt || new Date().toISOString(),
+          uri: post.uri || '',
+          handle: post.author?.handle || handle,
+          source: handle
+        });
+      });
+    });
+
+    if (!allItems.length) {
+      container.innerHTML = '<div class="empty-text">No Columbia posts loaded</div>';
       if (countEl) countEl.textContent = '0 items';
       return;
     }
 
-    items.forEach(item => {
-      const post = item.post || {};
-      const text = post.record?.text || '';
-      const indexedAt = post.indexedAt || new Date().toISOString();
-      const uri = post.uri || '';
-      const handle = post.author?.handle || WIS_BSKY_HANDLE;
+    allItems.sort((a, b) => new Date(b.indexedAt) - new Date(a.indexedAt));
 
+    const shown = allItems.slice(0, COLUMBIA_MAX_ITEMS);
+
+    shown.forEach(item => {
       let postUrl = '#';
-      if (handle && uri) {
-        const parts = uri.split('/');
+
+      if (item.handle && item.uri) {
+        const parts = item.uri.split('/');
         const postId = parts[parts.length - 1];
-        postUrl = 'https://bsky.app/profile/' + handle + '/post/' + postId;
+        postUrl = 'https://bsky.app/profile/' + item.handle + '/post/' + postId;
       }
+
+      let sourceLabel = 'Columbia';
+      if (item.source.includes('wistv')) sourceLabel = 'WIS TV';
+      else if (item.source.includes('thestate')) sourceLabel = 'The State';
 
       const card = document.createElement('a');
       card.className = 'news-card';
       card.href = postUrl;
       card.target = '_blank';
       card.rel = 'noopener';
+
       card.innerHTML =
-        '<div class="nc-source geo-columbia"><span class="src-dot"></span> WIS TV · Bluesky</div>' +
-        '<div class="nc-headline">' + escHtml(text) + '</div>' +
-        '<div class="nc-time">' + relTime(indexedAt) + '</div>';
+        '<div class="nc-source geo-columbia"><span class="src-dot"></span> ' + escHtml(sourceLabel) + '</div>' +
+        '<div class="nc-headline">' + escHtml(item.text) + '</div>' +
+        '<div class="nc-time">' + relTime(item.indexedAt) + '</div>';
 
       container.appendChild(card);
     });
 
-    if (countEl) countEl.textContent = items.length + ' items';
+    if (countEl) countEl.textContent = shown.length + ' items';
 
   } catch (e) {
-    container.innerHTML = '<div class="empty-text">Failed to load WIS feed</div>';
+    container.innerHTML = '<div class="empty-text">Failed to load Columbia feed</div>';
     if (countEl) countEl.textContent = '';
-    console.warn('WIS Bluesky:', e);
+    console.warn('Columbia Bluesky:', e);
   }
 }
-
+  
   function degToCompass(deg) {
     const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
     return dirs[Math.round(deg / 22.5) % 16];
