@@ -1390,15 +1390,15 @@ body::after {
     return card;
   }
 
-function loadAPNews() {
-  return loadFeedColumn('apnews-feed', 'apnews-count', [
-    {
-      name: 'AP News',
-      url: 'https://apnews.com/rss',
-      geoClass: 'geo-apnews'
-    }
-  ], { filter: false });
-}
+<div class="column col-apnews">
+  <div class="col-header">
+    <h2><span class="geo-dot"></span> AP News</h2>
+    <span class="col-count" id="apnews-count"></span>
+  </div>
+  <div class="col-body" id="apnews-feed">
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+  </div>
+</div>
 
   function updateClock() {
     const now = new Date();
