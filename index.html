@@ -1390,15 +1390,15 @@ body::after {
     return card;
   }
 
- function load404Media() {
-  return loadFeedColumn('bsky-feed', 'bsky-count', [
+function loadAPNews() {
+  return loadFeedColumn('apnews-feed', 'apnews-count', [
     {
-      name: '404 Media',
-      url: 'https://www.404media.co/rss/',
-      geoClass: 'geo-bsky'
+      name: 'AP News',
+      url: 'https://apnews.com/rss',
+      geoClass: 'geo-apnews'
     }
   ], { filter: false });
-  }
+}
 
   function updateClock() {
     const now = new Date();
